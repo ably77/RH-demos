@@ -188,10 +188,14 @@ oc logs kafka-consumer1
 oc logs kafka-consumer2
 ```
 
-Bonus:
-- Navigate to the Openshift UI and demo through all of the dynamic changes, monitoring, resource consumption, etc.
-  - If you are using Openshift 4 you can also see additional cluster level metrics for pods
-- Navigate to the Grafana UI to see Kafka/Zookeeper specific metrics collected by Prometheus
+## Bonus:
+Navigate to the Openshift UI and demo through all of the dynamic changes, monitoring, resource consumption, etc.
+![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/openshift1.png)
+
+If you are using Openshift 4 you can also see additional cluster level metrics for pods, for example our kafka broker `kafka-cluster-0`
+![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/openshift2.png)
+
+Navigate back to the Grafana UI to see Kafka/Zookeeper specific metrics collected by Prometheus and how the Jobs that we deployed in our demo can be visualized in real-time
 
 
 ### Additional Useful Commands:

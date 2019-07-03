@@ -1,0 +1,73 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    app: kafka-producer1-job1
+  name: kafka-producer1-job1
+spec:
+  parallelism: 10
+  completions: 100
+  backoffLimit: 5
+  template:
+    metadata:
+      labels:
+        app: kafka-producer1
+    spec:
+      containers:
+      - name: kafka-producer1
+        image: scholzj/kafka-producer:latest
+        env:
+          - name: BOOTSTRAP_SERVERS
+            value: my-cluster-kafka:9092
+          - name: TOPIC
+            value: my-job-topic1
+          - name: TIMER
+            value: "1000"
+          - name: NUMBER_OF_KEYS
+            value: "2"
+          - name: MESSAGE_COUNT
+            value: "10"
+        resources:
+          requests:
+            memory: "50Mi"
+            cpu: "50m"
+          limits:
+            memory: "100Mi"
+            cpu: "100m"
+      restartPolicy: OnFailure
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    app: kafka-consumer-job1
+  name: kafka-consumer-job1
+spec:
+  parallelism: 1
+  completions: 1
+  backoffLimit: 5
+  template:
+    metadata:
+      labels:
+        app: kafka-consumer1
+    spec:
+      containers:
+      - name: kafka-consumer1
+        image: scholzj/kafka-consumer:latest
+        env:
+          - name: BOOTSTRAP_SERVERS
+            value: my-cluster-kafka:9092
+          - name: TOPIC
+            value: my-job-topic1
+          - name: GROUP_ID
+            value: my-kafka-consumer1
+          - name: MESSAGE_COUNT
+            value: "1000"
+        resources:
+          requests:
+            memory: "50Mi"
+            cpu: "50m"
+          limits:
+            memory: "100Mi"
+            cpu: "100m"
+      restartPolicy: OnFailure

@@ -4,6 +4,29 @@
 - Openshift/Kubernetes Cluster
 - Admin Privileges (i.e. cluster-admin RBAC privileges or logged in as system:admin user)
 
+## Running this Demo
+If you have an Openshift cluster up and are authenticated to the CLI, just run the command below. If you prefer to run through the commands manually, the instructions are in the section below.
+```
+./runme.sh
+```
+
+This quick script will:
+- Login to Openshift as an admin
+- Deploy the Strimzi Kafka Operator
+- Deploy an ephemeral kafka cluster with 2 broker nodes
+- Deploy Prometheus
+- Deploy Grafana
+- Forward port 3000 to localhost for Grafana
+
+Open Grafana and login as `admin/admin`
+```
+open http://localhost:3000
+```
+
+From there, follow the instructions in the "Monitoring using Prometheus and Grafana" section to login to Grafana and configure your data sources and graphs. Afterwards, proceed to the demo section.
+
+## Manual Installation Steps:
+
 ### Login as Admin
 ```
 oc login -u system:admin
@@ -173,7 +196,14 @@ To edit your topic (i.e. adding topic parameters or scaling up partitions)
 oc edit -f my-topic1.yaml
 ```
 
-### Uninstall
+## Uninstall
+
+Run
+```
+./uninstall.sh
+```
+
+### Manual Steps to Uninstall
 
 Removing the consumers:
 ```
@@ -186,6 +216,7 @@ Removing Jobs:
 oc delete -f job1.yaml
 oc delete -f job2.yaml
 oc delete -f job3.yaml
+oc delete -f job4.yaml
 ```
 
 Delete Kafka Cluster

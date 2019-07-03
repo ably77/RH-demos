@@ -1,0 +1,145 @@
+
+strimzi-0.12.1/openshift.local.clusterup/kube-apiserver/master.proxy-client.key
+strimzi-0.12.1/openshift.local.clusterup/kube-apiserver/master.server.crt
+strimzi-0.12.1/openshift.local.clusterup/kube-apiserver/master.server.key
+strimzi-0.12.1/openshift.local.clusterup/kube-apiserver/openshift-aggregator.crt
+strimzi-0.12.1/openshift.local.clusterup/kube-apiserver/openshift-aggregator.key
+strimzi-0.12.1/openshift.local.clusterup/kube-apiserver/openshift-master.crt
+strimzi-0.12.1/openshift.local.clusterup/kube-apiserver/openshift-master.key
+strimzi-0.12.1/openshift.local.clusterup/kube-apiserver/openshift-master.kubeconfig
+strimzi-0.12.1/openshift.local.clusterup/kube-apiserver/router.crt
+strimzi-0.12.1/openshift.local.clusterup/kube-apiserver/router.key
+strimzi-0.12.1/openshift.local.clusterup/kube-apiserver/router.pem
+strimzi-0.12.1/openshift.local.clusterup/kube-apiserver/service-signer.crt
+strimzi-0.12.1/openshift.local.clusterup/kube-apiserver/service-signer.key
+strimzi-0.12.1/openshift.local.clusterup/kube-apiserver/serviceaccounts.private.key
+strimzi-0.12.1/openshift.local.clusterup/kube-apiserver/serviceaccounts.public.key
+strimzi-0.12.1/openshift.local.clusterup/kubedns/ca.crt
+strimzi-0.12.1/openshift.local.clusterup/kubedns/master-client.crt
+strimzi-0.12.1/openshift.local.clusterup/kubedns/master-client.key
+strimzi-0.12.1/openshift.local.clusterup/kubedns/node-client-ca.crt
+strimzi-0.12.1/openshift.local.clusterup/kubedns/node-config.yaml
+strimzi-0.12.1/openshift.local.clusterup/kubedns/node-registration.json
+strimzi-0.12.1/openshift.local.clusterup/kubedns/node.kubeconfig
+strimzi-0.12.1/openshift.local.clusterup/kubedns/resolv.conf
+strimzi-0.12.1/openshift.local.clusterup/kubedns/server.crt
+strimzi-0.12.1/openshift.local.clusterup/kubedns/server.key
+strimzi-0.12.1/openshift.local.clusterup/logs/centos-imagestreams-001.stderr
+strimzi-0.12.1/openshift.local.clusterup/logs/centos-imagestreams-001.stdout
+strimzi-0.12.1/openshift.local.clusterup/logs/create-kubelet-flags-001.stderr
+strimzi-0.12.1/openshift.local.clusterup/logs/create-kubelet-flags-001.stdout
+strimzi-0.12.1/openshift.local.clusterup/logs/create-master-config-001.stderr
+strimzi-0.12.1/openshift.local.clusterup/logs/create-master-config-001.stdout
+strimzi-0.12.1/openshift.local.clusterup/logs/create-node-config-001.stderr
+strimzi-0.12.1/openshift.local.clusterup/logs/create-node-config-001.stdout
+strimzi-0.12.1/openshift.local.clusterup/logs/install-router-001.stderr
+strimzi-0.12.1/openshift.local.clusterup/logs/install-router-001.stdout
+strimzi-0.12.1/openshift.local.clusterup/logs/kube-dns-001.stderr
+strimzi-0.12.1/openshift.local.clusterup/logs/kube-dns-001.stdout
+strimzi-0.12.1/openshift.local.clusterup/logs/kube-proxy-001.stderr
+strimzi-0.12.1/openshift.local.clusterup/logs/kube-proxy-001.stdout
+strimzi-0.12.1/openshift.local.clusterup/logs/openshift-apiserver-001.stderr
+strimzi-0.12.1/openshift.local.clusterup/logs/openshift-apiserver-001.stdout
+strimzi-0.12.1/openshift.local.clusterup/logs/openshift-controller-manager-001.stderr
+strimzi-0.12.1/openshift.local.clusterup/logs/openshift-controller-manager-001.stdout
+strimzi-0.12.1/openshift.local.clusterup/logs/openshift-image-registry-001.stderr
+strimzi-0.12.1/openshift.local.clusterup/logs/openshift-image-registry-001.stdout
+strimzi-0.12.1/openshift.local.clusterup/logs/openshift-service-cert-signer-operator-001.stderr
+strimzi-0.12.1/openshift.local.clusterup/logs/openshift-service-cert-signer-operator-001.stdout
+strimzi-0.12.1/openshift.local.clusterup/logs/openshift-web-console-operator-001.stderr
+strimzi-0.12.1/openshift.local.clusterup/logs/openshift-web-console-operator-001.stdout
+strimzi-0.12.1/openshift.local.clusterup/logs/sample-templates-cakephp quickstart-001.stderr
+strimzi-0.12.1/openshift.local.clusterup/logs/sample-templates-cakephp quickstart-001.stdout
+strimzi-0.12.1/openshift.local.clusterup/logs/sample-templates-dancer quickstart-001.stderr
+strimzi-0.12.1/openshift.local.clusterup/logs/sample-templates-dancer quickstart-001.stdout
+strimzi-0.12.1/openshift.local.clusterup/logs/sample-templates-django quickstart-001.stderr
+strimzi-0.12.1/openshift.local.clusterup/logs/sample-templates-django quickstart-001.stdout
+strimzi-0.12.1/openshift.local.clusterup/logs/sample-templates-jenkins pipeline ephemeral-001.stderr
+strimzi-0.12.1/openshift.local.clusterup/logs/sample-templates-jenkins pipeline ephemeral-001.stdout
+strimzi-0.12.1/openshift.local.clusterup/logs/sample-templates-mariadb-001.stderr
+strimzi-0.12.1/openshift.local.clusterup/logs/sample-templates-mariadb-001.stdout
+strimzi-0.12.1/openshift.local.clusterup/logs/sample-templates-mongodb-001.stderr
+strimzi-0.12.1/openshift.local.clusterup/logs/sample-templates-mongodb-001.stdout
+strimzi-0.12.1/openshift.local.clusterup/logs/sample-templates-mysql-001.stderr
+strimzi-0.12.1/openshift.local.clusterup/logs/sample-templates-mysql-001.stdout
+strimzi-0.12.1/openshift.local.clusterup/logs/sample-templates-nodejs quickstart-001.stderr
+strimzi-0.12.1/openshift.local.clusterup/logs/sample-templates-nodejs quickstart-001.stdout
+strimzi-0.12.1/openshift.local.clusterup/logs/sample-templates-postgresql-001.stderr
+strimzi-0.12.1/openshift.local.clusterup/logs/sample-templates-postgresql-001.stdout
+strimzi-0.12.1/openshift.local.clusterup/logs/sample-templates-rails quickstart-001.stderr
+strimzi-0.12.1/openshift.local.clusterup/logs/sample-templates-rails quickstart-001.stdout
+strimzi-0.12.1/openshift.local.clusterup/logs/sample-templates-sample pipeline-001.stderr
+strimzi-0.12.1/openshift.local.clusterup/logs/sample-templates-sample pipeline-001.stdout
+strimzi-0.12.1/openshift.local.clusterup/node/ca.crt
+strimzi-0.12.1/openshift.local.clusterup/node/master-client.crt
+strimzi-0.12.1/openshift.local.clusterup/node/master-client.key
+strimzi-0.12.1/openshift.local.clusterup/node/node-client-ca.crt
+strimzi-0.12.1/openshift.local.clusterup/node/node-config.yaml
+strimzi-0.12.1/openshift.local.clusterup/node/node-registration.json
+strimzi-0.12.1/openshift.local.clusterup/node/node.kubeconfig
+strimzi-0.12.1/openshift.local.clusterup/node/server.crt
+strimzi-0.12.1/openshift.local.clusterup/node/server.key
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/admin.crt
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/admin.key
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/admin.kubeconfig
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/ca-bundle.crt
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/ca.crt
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/ca.key
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/ca.serial.txt
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/etcd.server.crt
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/etcd.server.key
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/frontproxy-ca.crt
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/frontproxy-ca.key
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/frontproxy-ca.serial.txt
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/master-config.yaml
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/master.etcd-client.crt
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/master.etcd-client.key
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/master.kubelet-client.crt
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/master.kubelet-client.key
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/master.proxy-client.crt
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/master.proxy-client.key
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/master.server.crt
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/master.server.key
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/openshift-aggregator.crt
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/openshift-aggregator.key
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/openshift-master.crt
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/openshift-master.key
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/openshift-master.kubeconfig
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/service-signer.crt
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/service-signer.key
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/serviceaccounts.private.key
+strimzi-0.12.1/openshift.local.clusterup/openshift-apiserver/serviceaccounts.public.key
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/admin.crt
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/admin.key
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/admin.kubeconfig
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/ca-bundle.crt
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/ca.crt
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/ca.key
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/ca.serial.txt
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/etcd.server.crt
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/etcd.server.key
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/frontproxy-ca.crt
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/frontproxy-ca.key
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/frontproxy-ca.serial.txt
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/master-config.yaml
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/master.etcd-client.crt
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/master.etcd-client.key
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/master.kubelet-client.crt
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/master.kubelet-client.key
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/master.proxy-client.crt
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/master.proxy-client.key
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/master.server.crt
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/master.server.key
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/openshift-aggregator.crt
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/openshift-aggregator.key
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/openshift-master.crt
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/openshift-master.key
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/openshift-master.kubeconfig
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/service-signer.crt
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/service-signer.key
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/serviceaccounts.private.key
+strimzi-0.12.1/openshift.local.clusterup/openshift-controller-manager/serviceaccounts.public.key
+strimzi-0.12.1/openshift.local.clusterup/static-pod-manifests/apiserver.yaml
+strimzi-0.12.1/openshift.local.clusterup/static-pod-manifests/etcd.yaml
+strimzi-0.12.1/openshift.local.clusterup/static-pod-manifests/kube-controller-manager.yaml
+strimzi-0.12.1/openshift.local.clusterup/static-pod-manifests/kube-scheduler.yaml

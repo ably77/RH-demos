@@ -1,4 +1,4 @@
-# Strimzi Kafka Demo
+# Openshift Operator Demo - Strimzi Kafka
 
 ## Prerequisites:
 - Openshift/Kubernetes Cluster

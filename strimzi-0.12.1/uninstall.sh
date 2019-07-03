@@ -9,6 +9,11 @@ oc delete -f job1.yaml
 oc delete -f job2.yaml
 oc delete -f job3.yaml
 
+# Remove Kafka Topics
+oc delete -f my-topic1.yaml
+oc delete -f my-topic2.yaml
+oc delete -f my-topic3.yaml
+
 # Delete Kafka Cluster
 oc delete -f kafka-cluster.yaml
 

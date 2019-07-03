@@ -14,6 +14,7 @@ This quick script will:
 - Login to Openshift as an admin
 - Deploy the Strimzi Kafka Operator
 - Deploy an ephemeral kafka cluster with 2 broker nodes
+- Create three Kafka topics (my-topic1, my-topic2, my-topic3)
 - Deploy Prometheus
 - Deploy Grafana
 - Forward port 3000 to localhost for Grafana
@@ -59,6 +60,13 @@ my-cluster-entity-operator-6bc7f6985c-q29p5   3/3     Running   0          44s
 my-cluster-kafka-0                            2/2     Running   1          91s
 my-cluster-zookeeper-0                        2/2     Running   0          2m30s
 strimzi-cluster-operator-78f8bf857-kpmhb      1/1     Running   0          3m10s
+```
+
+### Create Topics
+Now that your cluster is up, you can create Kafka topics to which producers and consumers will subscribe to
+```
+oc create -f my-topic1.yaml
+oc create -f my-topic2.yaml
 ```
 
 ## Monitoring using Prometheus and Grafana
@@ -114,12 +122,6 @@ Once you're done you should be able to see dashboards for both Kafka
 
 and Zookeeper:
 ![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/dashboard2.png)
-
-## Create Topics
-```
-oc create -f my-topic1.yaml
-oc create -f my-topic2.yaml
-```
 
 ## Demo 1
 To show a basic demo of producing and consuming individual messages you can use the commands below:
@@ -230,6 +232,13 @@ oc delete -f job1.yaml
 oc delete -f job2.yaml
 oc delete -f job3.yaml
 oc delete -f job4.yaml
+```
+
+Remove Kafka topics
+```
+oc delete -f my-topic1.yaml
+oc delete -f my-topic2.yaml
+oc delete -f my-topic3.yaml
 ```
 
 Delete Kafka Cluster

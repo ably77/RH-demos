@@ -7,7 +7,12 @@ oc login -u system:admin
 oc apply -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/0.12.1/strimzi-cluster-operator-0.12.1.yaml -n myproject
 
 ### Provision the Apache Kafka Cluster
-oc apply -f kafka-cluster.yaml
+oc create -f kafka-cluster.yaml
+
+### Create Kafka Topics
+oc create -f my-topic1.yaml
+oc create -f my-topic2.yaml
+oc create -f my-topic3.yaml
 
 ### Start up your Prometheus server
 oc create -f alerting-rules.yaml

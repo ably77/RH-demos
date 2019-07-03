@@ -84,10 +84,10 @@ open http://localhost:3000
 ```
 
 Login using (admin/admin)
-(Insert Picture Here)
+![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/grafana1.png)
 
 Click on the "Add data Source" icon in the Grafana Homepage
-(Insert Picture Here)
+![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/grafana2.png)
 
 Add Prometheus as a datasource, specifying the information below and select Save & Test at the bottom
 ```
@@ -96,11 +96,24 @@ Type: Prometheus
 URL: http://prometheus:9090
 ```
 
-From the top left menu, click on "Dashboards" and then "Import" to open the "Import Dashboard" window where the provided strimzi-kafka.json and strimzi-zookeeper.json files can be imported or their content pasted.
-(Insert Picture Here)
+![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/grafana4.png)
 
-Now you should be able to see dashboards for both Kafka and Zookeeper!
-(Insert Picture Here)
+From the top left menu, click on "Dashboards" and then "Import" to open the "Import Dashboard" window
+![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/grafana5.png)
+
+Paste/import the contents of `kafka-dashboard.json` located in this repo
+![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/grafana6.png)
+
+Select Prometheus in the drop-down as your data-source
+![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/grafana7.png)
+
+Now, repeat these steps for importing the Zookeeper dashboard
+
+Once you're done you should be able to see dashboards for both Kafka
+![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/dashboard1.png)
+
+and Zookeeper:
+![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/dashboard2.png)
 
 ## Create Topics
 ```

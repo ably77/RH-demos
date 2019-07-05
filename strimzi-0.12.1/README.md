@@ -1,5 +1,32 @@
 # Openshift Operator Demo - Strimzi Kafka
 
+## Overview
+Apache Kafka is a highly scalable and performant distributed event streaming platform great for storing, reading, and analyzing streaming data. Originally created at LinkedIn, the project was open sourced to the Apache Foundation in 2011. Kafka enables companies looking to move from traditional batch processes over to more real-time streaming use cases.
+
+![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/architecture1.png)
+
+The diagram above is a common example of many fast-data (streaming) solutions today. With kafka as a core component of your architecture, multiple raw data sources can pipe data to Kafka, be analyzed in real-time by tools such as Apache Spark, and persisted or consumed by other microservices
+
+### Kubernetes Operators
+An Operator is a method of packaging, deploying and managing a Kubernetes application. A Kubernetes application is an application that is both deployed on Kubernetes and managed using the Kubernetes APIs and kubectl tooling. With Operators, the kubernetes community gains a standardized way to build, deploy, operate, upgrade, and troubleshoot Kubernetes applications.
+
+The full list of Operators can be found on [operatorhub.io](https://operatorhub.io/), the home for the Kubernetes community to share Operators.
+
+### Strimzi Kafka Operator
+Today we will be using the [strimzi.io](https://operatorhub.io/operator/strimzi-kafka-operator) Kafka Operator. Strimzi makes it easy to run Apache Kafka on OpenShift or Kubernetes.
+
+Strimzi provides three operators:
+
+Cluster Operator
+Responsible for deploying and managing Apache Kafka clusters within an OpenShift or Kubernetes cluster.
+
+Topic Operator
+Responsible for managing Kafka topics within a Kafka cluster running within an OpenShift or Kubernetes cluster.
+
+User Operator
+Responsible for managing Kafka users within a Kafka cluster running within an OpenShift or Kubernetes cluster.
+
+
 ## Prerequisites:
 - Openshift/Kubernetes Cluster
 - Admin Privileges (i.e. cluster-admin RBAC privileges or logged in as system:admin user)
@@ -154,7 +181,7 @@ resources:
 
 We can also manipulate the kafka-specific parameters under the `command` spec, this will allow us to send messages to other topics, increase the number of messages per actor, how large the messages are, and how quickly they come through:
 
-In our default example we want to send our messages to the topic `my-topic`, each actor sending 10 messages, each message with a record size of 5 bytes, and at a throughput of 1000 messages/second maximum.
+In our default example we want to send our messages to the topic `my-topic1`, each actor sending 10 messages, each message with a record size of 5 bytes, and at a throughput of 1000 messages/second maximum.
 ```
 --topic my-topic1
 --num-records 10

@@ -3,7 +3,7 @@
 ## Overview
 Apache Kafka is a highly scalable and performant distributed event streaming platform great for storing, reading, and analyzing streaming data. Originally created at LinkedIn, the project was open sourced to the Apache Foundation in 2011. Kafka enables companies looking to move from traditional batch processes over to more real-time streaming use cases.
 
-![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/architecture1.png)
+![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/architecture1.jpg)
 
 The diagram above is a common example of many fast-data (streaming) solutions today. With kafka as a core component of your architecture, multiple raw data sources can pipe data to Kafka, be analyzed in real-time by tools such as Apache Spark, and persisted or consumed by other microservices
 

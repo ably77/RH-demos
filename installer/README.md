@@ -31,43 +31,7 @@ To install using custom config
 ./bin/openshift-install create cluster --dir=<installation_directory> --log-level debug
 ```
 
-## Machine Sets
-
-View current machine sets
-```
-oc get machinesets -n openshift-machine-api
-```
-
-Check values of a specific MachineSet
-```
-oc get machineset <machineset_name> -n openshift-machine-api -o yaml
-```
-
-Creating a Machine Set
-
-Modify the `machineset.template.yaml` to replace `<clusterID>`, `<role>`, and `<region>` parameter values. In this sample, <clusterID> is the cluster ID that you set when you provisioned the cluster and <role> is the node label to add.
-
-Common Region Options:
-```
-us-west-2a
-us-west-2b
-us-west-2c
-us-east-1a
-us-east-1b
-us-east-1c
-```
-
-To create the MachineSet
-```
-oc create -f <machineset_name.yaml>
-```
-
-View the new node and confirm that the new node has the label that you specified
-```
-oc get node <node_name> --show-labels
-```
-
-## Uninstalling
+## Uninstalling Openshift 4
 
 To uninstall the Openshift 4 cluster
 ```

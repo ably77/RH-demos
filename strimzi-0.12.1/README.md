@@ -72,10 +72,10 @@ After that we feed Strimzi with a simple Custom Resource, which will than give y
 
 For our demo we will be using a single kafka broker that uses ephemeral storage and exposes Prometheus metrics:
 ```
-oc apply -f kafka-cluster.yaml
+oc apply -f kafka-cluster.yaml -n myproject
 ```
 
-We can now watch the deployment on the myproject namesapce, and see all required pods being created:
+We can now watch the deployment on the myproject namespace, and see all required pods being created:
 ```
 oc get pods -n myproject -w
 ```
@@ -96,16 +96,64 @@ oc create -f my-topic1.yaml
 oc create -f my-topic2.yaml
 ```
 
+### Setting up NodePort routes
+Get the node port of the external bootstrap service
+```
+oc get service my-cluster-kafka-external-bootstrap -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
+```
+
+Get the node port of the my-cluster-kafka-n service
+```
+oc get service my-cluster-kafka-0 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
+oc get service my-cluster-kafka-1 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
+oc get service my-cluster-kafka-2 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
+```
+
+Output should look similar to below:
+```
+$ oc get service my-cluster-kafka-0 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
+32141
+$ oc get service my-cluster-kafka-1 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
+32473
+$ oc get service my-cluster-kafka-2 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
+31259
+```
+
+Get a list of your your nodes:
+```
+$ oc get nodes
+NAME                                         STATUS    ROLES     AGE       VERSION
+ip-10-0-135-212.us-west-2.compute.internal   Ready     worker    4h30m     v1.14.0+011679b8e
+ip-10-0-136-104.us-west-2.compute.internal   Ready     master    4h39m     v1.14.0+011679b8e
+ip-10-0-152-25.us-west-2.compute.internal    Ready     master    4h39m     v1.14.0+011679b8e
+ip-10-0-158-227.us-west-2.compute.internal   Ready     worker    4h30m     v1.14.0+011679b8e
+ip-10-0-160-13.us-west-2.compute.internal    Ready     worker    4h30m     v1.14.0+011679b8e
+ip-10-0-170-164.us-west-2.compute.internal   Ready     master    4h39m     v1.14.0+011679b8e
+```
+
+Get the address of one of the nodes in your Kubernetes cluster (replace node-name with the name of one of your nodes - use kubectl get nodes to list all nodes):
+```
+kubectl get node ip-10-0-136-104.us-west-2.compute.internal -o=jsonpath='{range .status.addresses[*]}{.type}{"\t"}{.address}{"\n"}'
+```
+
+Output should look similar to below:
+```
+$ oc get node ip-10-0-136-104.us-west-2.compute.internal -o=jsonpath='{range .status.addresses[*]}{.type}{"\t"}{.address}{"\n"}'
+InternalIP	10.0.136.104
+InternalDNS	ip-10-0-136-104.us-west-2.compute.internal
+Hostname	ip-10-0-136-104.us-west-2.compute.internal
+```
+
 ## Monitoring using Prometheus and Grafana
 First start up your Prometheus server:
 ```
-oc create -f alerting-rules.yaml
-oc create -f prometheus.yaml
+oc create -f alerting-rules.yaml -n myproject
+oc create -f prometheus.yaml -n myproject
 ```
 
 Then start your Grafana server:
 ```
-oc create -f grafana.yaml
+oc create -f grafana.yaml -n myproject
 ```
 
 Access the grafana dashboard by using port-forwarding. First get the name of your Grafana Pod using `oc get pods` and then replace the pod name like the command below
@@ -150,17 +198,30 @@ Once you're done you should be able to see dashboards for both Kafka
 and Zookeeper:
 ![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/dashboard2.png)
 
-## Demo 1
+## Demo 1 - Using a Local Deployment
 To show a basic demo of producing and consuming individual messages you can use the commands below:
 
 To start a producer container where we can dynamically input messages:
 ```
-oc run kafka-producer -ti --image=strimzi/kafka:0.12.1-kafka-2.2.1 --rm=true --restart=Never -- bin/kafka-console-producer.sh --broker-list my-cluster-kafka-bootstrap:9092 --topic my-topic1
+oc run kafka-producer -n myproject  -ti --image=strimzi/kafka:0.12.1-kafka-2.2.1 --rm=true --restart=Never -- bin/kafka-console-producer.sh --broker-list my-cluster-kafka-bootstrap:9092 --topic my-topic1
 ```
 
 To start a consumer container so we can see the received messages:
 ```
-oc run kafka-consumer -ti --image=strimzi/kafka:0.12.1-kafka-2.2.1 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server my-cluster-kafka-bootstrap:9092 --topic my-topic1 --from-beginning
+oc run kafka-consumer -n myproject -ti --image=strimzi/kafka:0.12.1-kafka-2.2.1 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server my-cluster-kafka-bootstrap:9092 --topic my-topic1 --from-beginning
+```
+
+## Demo 1 - Using a Multi-Node Deployment
+To show a basic demo of producing and consuming individual messages you can use the commands below:
+
+To start a producer container where we can dynamically input messages - replace the `--broker-list` entries with the `workerHostname`/`nodePort` values from earlier:
+```
+oc run kafka-producer -n myproject -ti --image=strimzi/kafka:0.12.1-kafka-2.2.1 --rm=true --restart=Never -- bin/kafka-console-producer.sh --broker-list <workerHostname>:<kafka-external-bootstrap_nodePort>,<workerHostname>:<kafka-broker-0_nodePort>,<workerHostname>:<kafka-broker-1_nodePort>,<workerHostname>:<kafka-broker-2_nodePort> --topic my-topic1
+```
+
+To start a consumer container so we can see the received messages - - replace the `--broker-list` entries with the `workerHostname`/`nodePort` values from earlier:
+```
+oc run kafka-consumer -ti -n myproject --image=strimzi/kafka:0.12.1-kafka-2.2.1 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server <workerHostname>:<kafka-external-bootstrap_nodePort>,<workerHostname>:<kafka-broker-0_nodePort>,<workerHostname>:<kafka-broker-1_nodePort>,<workerHostname>:<kafka-broker-2_nodePort> --topic my-topic1 --from-beginning
 ```
 
 ## Demo 2
@@ -191,22 +252,22 @@ In our default example we want to send our messages to the topic `my-topic1`, ea
 
 In order to run this demo just create the job which deploys a kafka producer writing messages to `my-topic1`
 ```
-oc create -f job1.yaml
+oc create -f job1.yaml -n myproject
 ```
 
 To start a consumer for `my-topic1` messages
 ```
-oc create -f consumer1.yaml
+oc create -f consumer1.yaml -n myproject
 ```
 
 If you want to demonstrate a second topic/producer combo running in parallel writing messages to `my-topic2`
 ```
-oc create -f job2.yaml
+oc create -f job2.yaml -n myproject
 ```
 
 To start a consumer for `my-topic2` messages
 ```
-oc create -f consumer2.yaml
+oc create -f consumer2.yaml -n myproject
 ```
 
 Navigate to the logs of a consumer to view incoming messages
@@ -234,7 +295,7 @@ oc get kafkatopic
 
 To scale your Kafka cluster up, add a broker using the commmand below and modify the `replicas:1 --> 2` for kafka brokers
 ```
-oc edit -f kafka-cluster.yaml
+oc edit -f kafka-cluster.yaml -n myproject
 ```
 
 To edit your topic (i.e. adding topic parameters or scaling up partitions)
@@ -253,16 +314,16 @@ Run
 
 Removing the consumers:
 ```
-oc delete pod kafka-consumer1
-oc delete pod kafka-consumer2
+oc delete pod kafka-consumer1 -n myproject
+oc delete pod kafka-consumer2 -n myproject
 ```
 
 Removing Jobs:
 ```
-oc delete -f job1.yaml
-oc delete -f job2.yaml
-oc delete -f job3.yaml
-oc delete -f job4.yaml
+oc delete -f job1.yaml -n myproject
+oc delete -f job2.yaml -n myproject
+oc delete -f job3.yaml -n myproject
+oc delete -f job4.yaml -n myproject
 ```
 
 Remove Kafka topics
@@ -274,18 +335,18 @@ oc delete -f my-topic3.yaml
 
 Delete Kafka Cluster
 ```
-oc delete -f kafka-cluster.yaml
+oc delete -f kafka-cluster.yaml -n myproject
 ```
 
 Delete Prometheus:
 ```
-oc delete -f alerting-rules.yaml
-oc delete -f prometheus.yaml
+oc delete -f alerting-rules.yaml -n myproject
+oc delete -f prometheus.yaml -n myproject
 ```
 
 Delete Grafana:
 ```
-oc delete -f grafana.yaml
+oc delete -f grafana.yaml -n myproject
 ```
 
 Remove Strimzi Operator

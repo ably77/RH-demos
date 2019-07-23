@@ -96,54 +96,6 @@ oc create -f my-topic1.yaml
 oc create -f my-topic2.yaml
 ```
 
-### Setting up NodePort routes
-Get the node port of the external bootstrap service
-```
-oc get service my-cluster-kafka-external-bootstrap -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
-```
-
-Get the node port of the my-cluster-kafka-n service
-```
-oc get service my-cluster-kafka-0 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
-oc get service my-cluster-kafka-1 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
-oc get service my-cluster-kafka-2 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
-```
-
-Output should look similar to below:
-```
-$ oc get service my-cluster-kafka-0 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
-32141
-$ oc get service my-cluster-kafka-1 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
-32473
-$ oc get service my-cluster-kafka-2 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
-31259
-```
-
-Get a list of your your nodes:
-```
-$ oc get nodes
-NAME                                         STATUS    ROLES     AGE       VERSION
-ip-10-0-135-212.us-west-2.compute.internal   Ready     worker    4h30m     v1.14.0+011679b8e
-ip-10-0-136-104.us-west-2.compute.internal   Ready     master    4h39m     v1.14.0+011679b8e
-ip-10-0-152-25.us-west-2.compute.internal    Ready     master    4h39m     v1.14.0+011679b8e
-ip-10-0-158-227.us-west-2.compute.internal   Ready     worker    4h30m     v1.14.0+011679b8e
-ip-10-0-160-13.us-west-2.compute.internal    Ready     worker    4h30m     v1.14.0+011679b8e
-ip-10-0-170-164.us-west-2.compute.internal   Ready     master    4h39m     v1.14.0+011679b8e
-```
-
-Get the address of one of the nodes in your Kubernetes cluster (replace node-name with the name of one of your nodes - use kubectl get nodes to list all nodes):
-```
-kubectl get node ip-10-0-136-104.us-west-2.compute.internal -o=jsonpath='{range .status.addresses[*]}{.type}{"\t"}{.address}{"\n"}'
-```
-
-Output should look similar to below:
-```
-$ oc get node ip-10-0-136-104.us-west-2.compute.internal -o=jsonpath='{range .status.addresses[*]}{.type}{"\t"}{.address}{"\n"}'
-InternalIP	10.0.136.104
-InternalDNS	ip-10-0-136-104.us-west-2.compute.internal
-Hostname	ip-10-0-136-104.us-west-2.compute.internal
-```
-
 ## Monitoring using Prometheus and Grafana
 First start up your Prometheus server:
 ```
@@ -197,6 +149,54 @@ Once you're done you should be able to see dashboards for both Kafka
 
 and Zookeeper:
 ![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/dashboard2.png)
+
+### Setting up NodePort routes (SKIP IF USING LOCAL DEPLOYMENT)
+Get the node port of the external bootstrap service
+```
+oc get service my-cluster-kafka-external-bootstrap -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
+```
+
+Get the node port of the my-cluster-kafka-n service
+```
+oc get service my-cluster-kafka-0 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
+oc get service my-cluster-kafka-1 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
+oc get service my-cluster-kafka-2 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
+```
+
+Output should look similar to below:
+```
+$ oc get service my-cluster-kafka-0 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
+32141
+$ oc get service my-cluster-kafka-1 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
+32473
+$ oc get service my-cluster-kafka-2 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
+31259
+```
+
+Get a list of your your nodes:
+```
+$ oc get nodes
+NAME                                         STATUS    ROLES     AGE       VERSION
+ip-10-0-135-212.us-west-2.compute.internal   Ready     worker    4h30m     v1.14.0+011679b8e
+ip-10-0-136-104.us-west-2.compute.internal   Ready     master    4h39m     v1.14.0+011679b8e
+ip-10-0-152-25.us-west-2.compute.internal    Ready     master    4h39m     v1.14.0+011679b8e
+ip-10-0-158-227.us-west-2.compute.internal   Ready     worker    4h30m     v1.14.0+011679b8e
+ip-10-0-160-13.us-west-2.compute.internal    Ready     worker    4h30m     v1.14.0+011679b8e
+ip-10-0-170-164.us-west-2.compute.internal   Ready     master    4h39m     v1.14.0+011679b8e
+```
+
+Get the address of one of the nodes in your Kubernetes cluster (replace node-name with the name of one of your nodes - use kubectl get nodes to list all nodes):
+```
+kubectl get node ip-10-0-136-104.us-west-2.compute.internal -o=jsonpath='{range .status.addresses[*]}{.type}{"\t"}{.address}{"\n"}'
+```
+
+Output should look similar to below:
+```
+$ oc get node ip-10-0-136-104.us-west-2.compute.internal -o=jsonpath='{range .status.addresses[*]}{.type}{"\t"}{.address}{"\n"}'
+InternalIP	10.0.136.104
+InternalDNS	ip-10-0-136-104.us-west-2.compute.internal
+Hostname	ip-10-0-136-104.us-west-2.compute.internal
+```
 
 ## Demo 1 - Using a Local Deployment
 To show a basic demo of producing and consuming individual messages you can use the commands below:

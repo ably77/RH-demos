@@ -58,13 +58,13 @@ https://access.redhat.com/documentation/en-us/red_hat_codeready_workspaces/1.2/h
 ### Creating a CodeReady Workspace
 
 To access the CodeReady Workspace first you need to register as a new user
-(workspaces1)
+![](https://github.com/ably77/RH-demos/blob/master/codeready/resources/workspaces1.png)
 
 Once logged in you create a new workspace and start by selecting your stack and memory
-(workspaces2)
+![](https://github.com/ably77/RH-demos/blob/master/codeready/resources/workspaces2.png)
 
 Next add or import a project, select one of the sample projects if you don't have one already
-(workspaces3)
+![](https://github.com/ably77/RH-demos/blob/master/codeready/resources/workspaces3.png)
 
 Click Create and Open when finished
 
@@ -73,14 +73,13 @@ Note: Allow a few minutes for your workspace to initialize and deploy
 ### Managing CodeReady Workspaces
 
 Navigate to the Workspaces tab - here you can handle administrative tasks such as adding workspaces, viewing a workspace config, or stopping/starting running workspaces
-
-(workspaces4)
+![](https://github.com/ably77/RH-demos/blob/master/codeready/resources/workspaces4.png)
 
 #### Stopping/Starting CodeReady Workspaces
 Once done with their workspace, an end-user can return existing resources to the cluster by stopping their workspace. Workspaces are backed by a persistentVolume, so data will be persisted when the workspace is brought back.
 
 Using the CLI you can see that when a workspace is removed through the console, the workspace containers are immediately terminated and resources returned to the cluster.
-(workspaces5)
+![](https://github.com/ably77/RH-demos/blob/master/codeready/resources/workspaces5.png)
 
 ```
 $ oc get pods -w | grep workspace
@@ -90,7 +89,7 @@ workspace6zu51oje9zg747vi.dockerimage-f548d64bc-h4c7w    1/1       Terminating  
 ```
 
 Resuming the workspace will quickly initiate a new workspace container deployment, with data persisted
-(workspaces6)
+![](https://github.com/ably77/RH-demos/blob/master/codeready/resources/workspaces6.png)
 
 
 ### Uninstalling

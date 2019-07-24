@@ -40,13 +40,13 @@ If you have an Openshift cluster up and are authenticated to the CLI, just run t
 This quick script will:
 - Login to Openshift as an admin
 - Deploy the Strimzi Kafka Operator
-- Deploy an ephemeral kafka cluster with 2 broker nodes
+- Deploy an ephemeral kafka cluster with 3 broker nodes and 3 zookeeper nodes
 - Create three Kafka topics (my-topic1, my-topic2, my-topic3)
 - Deploy Prometheus
 - Deploy Grafana
 - Forward port 3000 to localhost for Grafana
 
-Open Grafana and login as `admin/admin`
+Once complete, open Grafana and login as `admin/admin`
 ```
 open http://localhost:3000
 ```
@@ -107,72 +107,26 @@ Take a look at your existing services, note that some components are exposed usi
 oc get services -n myproject
 ```
 
-Output should look similar to below:
+The script below will set up three files in your directory named `job1.yaml`, `job2.yaml`, and `job3.yaml` that are configured correctly to use the NodePort services to route to the Kafka cluster brokers
 ```
-```
-
-Get the NodePort of the external bootstrap service
-```
-oc get service my-cluster-kafka-external-bootstrap -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
-```
-
-Get the node port of the my-cluster-kafka-n service
-```
-oc get service my-cluster-kafka-0 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
-oc get service my-cluster-kafka-1 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
-oc get service my-cluster-kafka-2 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
-```
-
-Output should look similar to below:
-```
-$ oc get service my-cluster-kafka-0 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
-32141
-$ oc get service my-cluster-kafka-1 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
-32473
-$ oc get service my-cluster-kafka-2 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
-31259
-```
-
-Get a list of your your nodes:
-```
-$ oc get nodes
-NAME                                         STATUS    ROLES     AGE       VERSION
-ip-10-0-135-212.us-west-2.compute.internal   Ready     worker    4h30m     v1.14.0+011679b8e
-ip-10-0-136-104.us-west-2.compute.internal   Ready     master    4h39m     v1.14.0+011679b8e
-ip-10-0-152-25.us-west-2.compute.internal    Ready     master    4h39m     v1.14.0+011679b8e
-ip-10-0-158-227.us-west-2.compute.internal   Ready     worker    4h30m     v1.14.0+011679b8e
-ip-10-0-160-13.us-west-2.compute.internal    Ready     worker    4h30m     v1.14.0+011679b8e
-ip-10-0-170-164.us-west-2.compute.internal   Ready     master    4h39m     v1.14.0+011679b8e
-```
-
-Get the address of one of the nodes in your Kubernetes cluster (replace node-name with the name of one of your nodes - use kubectl get nodes to list all nodes):
-```
-kubectl get node ip-10-0-136-104.us-west-2.compute.internal -o=jsonpath='{range .status.addresses[*]}{.type}{"\t"}{.address}{"\n"}'
-```
-
-Output should look similar to below:
-```
-$ oc get node ip-10-0-136-104.us-west-2.compute.internal -o=jsonpath='{range .status.addresses[*]}{.type}{"\t"}{.address}{"\n"}'
-InternalIP	10.0.136.104
-InternalDNS	ip-10-0-136-104.us-west-2.compute.internal
-Hostname	ip-10-0-136-104.us-west-2.compute.internal
+./setup-jobs.sh
 ```
 
 ## Demo 1 - Producing and consuming individual messages
 To show a basic demo of producing and consuming individual messages you can use the commands below:
 
-To start a producer container where we can dynamically input messages - replace the `--broker-list` entries with the `workerHostname`/`nodePort` values from earlier:
+To start a producer container where we can dynamically input messages
 ```
-oc run kafka-producer -n myproject -ti --image=strimzi/kafka:0.12.1-kafka-2.2.1 --rm=true --restart=Never -- bin/kafka-console-producer.sh --broker-list <workerHostname>:<kafka-external-bootstrap_nodePort>,<workerHostname>:<kafka-broker-0_nodePort>,<workerHostname>:<kafka-broker-1_nodePort>,<workerHostname>:<kafka-broker-2_nodePort> --topic my-topic1
+./producer.sh
 ```
 
-To start a consumer container so we can see the received messages - - replace the `--broker-list` entries with the `workerHostname`/`nodePort` values from earlier:
+To start a consumer container so we can see the received messages
 ```
-oc run kafka-consumer -ti -n myproject --image=strimzi/kafka:0.12.1-kafka-2.2.1 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server <workerHostname>:<kafka-external-bootstrap_nodePort> --topic my-topic1 --from-beginning
+./consumer.sh
 ```
 
 ## Demo 2 - Producing and consuming multiple messages
-We can also simulate a more real-world scenario by using a Job. Taking a look at the `job.yaml` we will note some parameters under `spec` that we can change to manipulate numbers of actors, and number of completions (each container instance serves as a "user" on our application)
+We can also simulate a more real-world scenario by using a Job. Taking a look at the `job.template.yaml` we will note some parameters under `spec` that we can change to manipulate numbers of actors, and number of completions (each container instance serves as a "user" on our application)
 
 In our default example we want to have three actors at a given time, 200 total completions, and provide the requests and limits for container resources to be 150/250 respectively
 ```
@@ -197,7 +151,17 @@ In our default example we want to send our messages to the topic `my-topic1`, ea
 --throughput 1000
 ```
 
-In order to run this demo just create the job which deploys a kafka producer writing messages to `my-topic1`
+### Create your job files
+A producer has been templatized into the example `job.template.yaml` file from which we will generate `job1.yaml`, `job2.yaml`, and `job3.yaml`
+```
+./setup-jobs.sh
+```
+
+Running this script will grab and set the correct variables for `<NODEIP>`,`<nodePort>` because these parameters will be different per each deployment
+
+### Running the Demo
+
+Deploy the `job1.yaml` which deploys a kafka producer writing messages to `my-topic1`
 ```
 oc create -f job1.yaml -n myproject
 ```
@@ -219,8 +183,8 @@ oc create -f consumer2.yaml -n myproject
 
 Navigate to the logs of a consumer to view incoming messages
 ```
-oc logs kafka-consumer1
-oc logs kafka-consumer2
+oc logs kafka-consumer1 -n myproject
+oc logs kafka-consumer2 -n myproject
 ```
 
 A single kafka topic can also handle many Producers sending many different messages to it, to demonstrate this you can run `job3.yaml`
@@ -235,6 +199,16 @@ Taking a look at the `job3.yaml` compared to `job1.yaml` you can see that the on
 
 Navigate back to the logs of `kafka-consumer1` and you should see two streams of different record sizes being consumed on `my-topic1`. An example output is below
 ```
+$ oc logs kafka-consumer1 -n myproject
+SSXVN
+SSXVN
+SSXVN
+SSXVN
+SSXVN
+SSXVNJHPDQ
+SSXVNJHPDQ
+SSXVNJHPDQ
+SSXVNJHPDQ
 ```
 
 ## Bonus:

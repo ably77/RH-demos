@@ -21,6 +21,6 @@ spec:
         command:
           - sh
           - -c
-          - "kafka-producer-perf-test --topic my-topic1 --num-records 10 --record-size 10 --throughput 1000 --producer-props acks=1 buffer.memory=67108864 compression.type=none batch.size=8196 linger.ms=0 retries=0 bootstrap.servers=my-cluster-kafka-bootstrap:9092"
+          - "kafka-producer-perf-test --topic my-topic1 --num-records 10 --record-size 10 --throughput 1000 --producer-props acks=1 buffer.memory=67108864 compression.type=none batch.size=8196 linger.ms=0 retries=0 bootstrap.servers=ip-10-0-137-225.us-west-2.compute.internal:32717,ip-10-0-137-225.us-west-2.compute.internal:32332,ip-10-0-137-225.us-west-2.compute.internal:30755,ip-10-0-137-225.us-west-2.compute.internal:31768"
       restartPolicy: OnFailure
   backoffLimit: 5

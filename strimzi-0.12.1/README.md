@@ -217,8 +217,8 @@ oc create -f consumer2.yaml -n myproject
 
 Navigate to the logs of a consumer to view incoming messages
 ```
-oc logs kafka-consumer1
-oc logs kafka-consumer2
+oc logs kafka-consumer1 -n myproject
+oc logs kafka-consumer2 -n myproject
 ```
 
 ## Bonus:

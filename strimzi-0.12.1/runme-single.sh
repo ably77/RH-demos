@@ -5,6 +5,9 @@ NAMESPACE=myproject
 ### Login as admin
 oc login -u system:admin
 
+### Create the project namespace
+oc create namespace ${NAMESPACE}
+
 ### Apply Strimzi Installation File
 oc apply -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/0.12.1/strimzi-cluster-operator-0.12.1.yaml -n ${NAMESPACE}
 

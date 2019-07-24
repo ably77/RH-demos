@@ -1,4 +1,4 @@
-# Openshift Strimzi Kafka Demo - Single Node Deployment (Minishift)
+# Openshift Strimzi Kafka Operator Demo - Single Node Deployment (Minishift)
 
 ## Overview
 Apache Kafka is a highly scalable and performant distributed event streaming platform great for storing, reading, and analyzing streaming data. Originally created at LinkedIn, the project was open sourced to the Apache Foundation in 2011. Kafka enables companies looking to move from traditional batch processes over to more real-time streaming use cases.
@@ -136,7 +136,7 @@ URL: http://prometheus:9090
 From the top left menu, click on "Dashboards" and then "Import" to open the "Import Dashboard" window
 ![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/grafana5.png)
 
-Paste/import the contents of `kafka-dashboard.json` located in this repo
+Paste/import the contents of `kafka-dashboard.json` located in the Dashboards directory of this repo
 ![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/grafana6.png)
 
 Select Prometheus in the drop-down as your data-source
@@ -151,7 +151,7 @@ and Zookeeper:
 ![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/dashboard2.png)
 
 
-## Demo 1
+## Demo 1 - Producing and consuming individual messages
 To show a basic demo of producing and consuming individual messages you can use the commands below:
 
 To start a producer container where we can dynamically input messages:
@@ -164,7 +164,7 @@ To start a consumer container so we can see the received messages:
 oc run kafka-consumer -n myproject -ti --image=strimzi/kafka:0.12.1-kafka-2.2.1 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server my-cluster-kafka-bootstrap:9092 --topic my-topic1 --from-beginning
 ```
 
-## Demo 2
+## Demo 2 - Producing and consuming multiple messages
 We can also simulate a more real-world scenario by using a Job. Taking a look at the `job.yaml` we will note some parameters under `spec` that we can change to manipulate numbers of actors, and number of completions (each container instance serves as a "user" on our application)
 
 In our default example we want to have three actors at a given time, 100 total completions, and provide the requests and limits for container resources to be 150/250 respectively

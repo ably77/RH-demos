@@ -1,4 +1,4 @@
-# Openshift Operator Demo - Strimzi Kafka
+# Openshift Strimzi Kafka Operator Demo - Multi-node Deployment (AWS)
 
 ## Overview
 Apache Kafka is a highly scalable and performant distributed event streaming platform great for storing, reading, and analyzing streaming data. Originally created at LinkedIn, the project was open sourced to the Apache Foundation in 2011. Kafka enables companies looking to move from traditional batch processes over to more real-time streaming use cases.
@@ -28,13 +28,13 @@ Responsible for managing Kafka users within a Kafka cluster running within an Op
 
 
 ## Prerequisites:
-- Openshift/Kubernetes Cluster
+- Multi Node Openshift/Kubernetes Cluster (3 workers minimum)
 - Admin Privileges (i.e. cluster-admin RBAC privileges or logged in as system:admin user)
 
 ## Running this Demo
 If you have an Openshift cluster up and are authenticated to the CLI, just run the command below. If you prefer to run through the commands manually, the instructions are in the section below.
 ```
-./runme.sh
+./runme-3broker.sh
 ```
 
 This quick script will:
@@ -72,7 +72,7 @@ After that we feed Strimzi with a simple Custom Resource, which will than give y
 
 For our demo we will be using a single kafka broker that uses ephemeral storage and exposes Prometheus metrics:
 ```
-oc apply -f kafka-cluster.yaml -n myproject
+oc apply -f kafka-cluster-3broker.yaml -n myproject
 ```
 
 We can now watch the deployment on the myproject namespace, and see all required pods being created:
@@ -94,6 +94,7 @@ Now that your cluster is up, you can create Kafka topics to which producers and 
 ```
 oc create -f my-topic1.yaml
 oc create -f my-topic2.yaml
+oc create -f my-topic3.yaml
 ```
 
 ## Monitoring using Prometheus and Grafana
@@ -110,7 +111,7 @@ oc create -f grafana.yaml -n myproject
 
 Access the grafana dashboard by using port-forwarding. First get the name of your Grafana Pod using `oc get pods` and then replace the pod name like the command below
 ```
-oc port-forward <grafana-6b59f9886c-7sccm> 3000:3000
+oc port-forward -n myproject <grafana-6b59f9886c-7sccm> 3000:3000
 ```
 
 You should now be able to access your Grafana dashboard
@@ -136,7 +137,7 @@ URL: http://prometheus:9090
 From the top left menu, click on "Dashboards" and then "Import" to open the "Import Dashboard" window
 ![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/grafana5.png)
 
-Paste/import the contents of `kafka-dashboard.json` located in this repo
+Paste/import the contents of `kafka-dashboard.json` located in the Dashboards directory this repo
 ![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/grafana6.png)
 
 Select Prometheus in the drop-down as your data-source
@@ -150,8 +151,37 @@ Once you're done you should be able to see dashboards for both Kafka
 and Zookeeper:
 ![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/dashboard2.png)
 
-### Setting up NodePort routes (SKIP IF USING LOCAL DEPLOYMENT)
-Get the node port of the external bootstrap service
+## Accessing Kafka
+
+REF: https://strimzi.io/2019/04/17/accessing-kafka-part-1.html
+
+In a single-node deployment of Kafka, routing and accessing the brokers is easy because everything is running on the same node. When we move to multi-node deployments, accessing the Kafka cluster requires additional Services to be created in order to route the traffic correctly. Read the reference link above to have a deeper understanding of Kafka's discovery protocol and more on the routing options below
+- Using NodePorts
+- Using OpenShift routes
+- Using Load Balancers
+- Using Ingress
+
+### Node Ports
+REF: https://strimzi.io/2019/04/23/accessing-kafka-part-2.html
+
+A NodePort is a special type of Kubernetes service. When such a service is created, Kubernetes will allocate a port on all nodes of the Kubernetes cluster and will make sure that all traffic to this port is routed to the service and eventually to the pods behind this service.
+
+The routing of the traffic is done by the kube-proxy Kubernetes component. It doesn’t matter which node your pod is running on. The node ports will be open on all nodes and the traffic will always reach your pod. So your clients need to connect to the node port on any of the nodes of the Kubernetes cluster and let Kubernetes handle the rest.
+
+The node port is selected from the port range 30000-32767 by default. But this range can be changed in Kubernetes configuration (see Kubernetes docs for more details about configuring the node port range).
+
+### Method 1: Setting up NodePort routes
+
+Take a look at your existing services, note that some components are exposed using type NodePort
+```
+oc get services -n myproject
+```
+
+Output should look similar to below:
+```
+```
+
+Get the NodePort of the external bootstrap service
 ```
 oc get service my-cluster-kafka-external-bootstrap -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
 ```
@@ -198,20 +228,7 @@ InternalDNS	ip-10-0-136-104.us-west-2.compute.internal
 Hostname	ip-10-0-136-104.us-west-2.compute.internal
 ```
 
-## Demo 1 - Using a Local Deployment
-To show a basic demo of producing and consuming individual messages you can use the commands below:
-
-To start a producer container where we can dynamically input messages:
-```
-oc run kafka-producer -n myproject  -ti --image=strimzi/kafka:0.12.1-kafka-2.2.1 --rm=true --restart=Never -- bin/kafka-console-producer.sh --broker-list my-cluster-kafka-bootstrap:9092 --topic my-topic1
-```
-
-To start a consumer container so we can see the received messages:
-```
-oc run kafka-consumer -n myproject -ti --image=strimzi/kafka:0.12.1-kafka-2.2.1 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server my-cluster-kafka-bootstrap:9092 --topic my-topic1 --from-beginning
-```
-
-## Demo 1 - Using a Multi-Node Deployment
+## Demo 1 - Producing and consuming individual messages
 To show a basic demo of producing and consuming individual messages you can use the commands below:
 
 To start a producer container where we can dynamically input messages - replace the `--broker-list` entries with the `workerHostname`/`nodePort` values from earlier:
@@ -224,10 +241,10 @@ To start a consumer container so we can see the received messages - - replace th
 oc run kafka-consumer -ti -n myproject --image=strimzi/kafka:0.12.1-kafka-2.2.1 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server <workerHostname>:<kafka-external-bootstrap_nodePort> --topic my-topic1 --from-beginning
 ```
 
-## Demo 2
+## Demo 2 - Producing and consuming multiple messages
 We can also simulate a more real-world scenario by using a Job. Taking a look at the `job.yaml` we will note some parameters under `spec` that we can change to manipulate numbers of actors, and number of completions (each container instance serves as a "user" on our application)
 
-In our default example we want to have three actors at a given time, 100 total completions, and provide the requests and limits for container resources to be 150/250 respectively
+In our default example we want to have three actors at a given time, 200 total completions, and provide the requests and limits for container resources to be 150/250 respectively
 ```
 parallelism: 3
 completions: 100
@@ -276,6 +293,20 @@ oc logs kafka-consumer1
 oc logs kafka-consumer2
 ```
 
+A single kafka topic can also handle many Producers sending many different messages to it, to demonstrate this you can run `job3.yaml`
+```
+oc create -f job3.yaml -n myproject
+```
+
+Taking a look at the `job3.yaml` compared to `job1.yaml` you can see that the only difference is in record-size
+```
+--record-size 10
+```
+
+Navigate back to the logs of `kafka-consumer1` and you should see two streams of different record sizes being consumed on `my-topic1`. An example output is below
+```
+```
+
 ## Bonus:
 Navigate to the Openshift UI and demo through all of the dynamic changes, monitoring, resource consumption, etc.
 ![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/openshift1.png)
@@ -284,6 +315,7 @@ If you are using Openshift 4 you can also see additional cluster level metrics f
 ![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/openshift2.png)
 
 Navigate back to the Grafana UI to see Kafka/Zookeeper specific metrics collected by Prometheus and how the Jobs that we deployed in our demo can be visualized in real-time
+![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/openshift3.png)
 
 
 ### Additional Useful Commands:
@@ -323,7 +355,6 @@ Removing Jobs:
 oc delete -f job1.yaml -n myproject
 oc delete -f job2.yaml -n myproject
 oc delete -f job3.yaml -n myproject
-oc delete -f job4.yaml -n myproject
 ```
 
 Remove Kafka topics
@@ -335,7 +366,7 @@ oc delete -f my-topic3.yaml
 
 Delete Kafka Cluster
 ```
-oc delete -f kafka-cluster.yaml -n myproject
+oc delete -f kafka-cluster-3broker.yaml -n myproject
 ```
 
 Delete Prometheus:

@@ -60,6 +60,11 @@ From there, follow the instructions in the "Monitoring using Prometheus and Graf
 oc login -u system:admin
 ```
 
+### Create the myproject namespace
+```
+oc create namespace myproject
+```
+
 ### Apply Strimzi Installation File
 Next we apply the Strimzi install files, including `ClusterRoles`, `ClusterRoleBindings` and some Custom Resource Definitions (`CRDs`). The CRDs define the schemas used for declarative management of the Kafka cluster, Kafka topics and users.
 

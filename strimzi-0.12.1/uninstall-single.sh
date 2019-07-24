@@ -2,6 +2,10 @@
 
 NAMESPACE=myproject
 
+# Removing the producer
+oc delete pod kafka-producer1 -n ${NAMESPACE}
+oc delete pod kafka-producer2 -n ${NAMESPACE}
+
 # Removing the consumer
 oc delete pod kafka-consumer1 -n ${NAMESPACE}
 oc delete pod kafka-consumer2 -n ${NAMESPACE}

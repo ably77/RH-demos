@@ -1,4 +1,4 @@
-# Openshift Strimzi Kafka Demo - Single Node Deployment (Minishift)
+# Openshift Operator Demo - Strimzi Kafka
 
 ## Overview
 Apache Kafka is a highly scalable and performant distributed event streaming platform great for storing, reading, and analyzing streaming data. Originally created at LinkedIn, the project was open sourced to the Apache Foundation in 2011. Kafka enables companies looking to move from traditional batch processes over to more real-time streaming use cases.
@@ -28,7 +28,7 @@ Responsible for managing Kafka users within a Kafka cluster running within an Op
 
 
 ## Prerequisites:
-- Minishift / Local Kubernetes Cluster
+- Openshift/Kubernetes Cluster
 - Admin Privileges (i.e. cluster-admin RBAC privileges or logged in as system:admin user)
 
 ## Running this Demo
@@ -72,7 +72,7 @@ After that we feed Strimzi with a simple Custom Resource, which will than give y
 
 For our demo we will be using a single kafka broker that uses ephemeral storage and exposes Prometheus metrics:
 ```
-oc apply -f kafka-cluster-single.yaml -n myproject
+oc apply -f kafka-cluster.yaml -n myproject
 ```
 
 We can now watch the deployment on the myproject namespace, and see all required pods being created:
@@ -150,8 +150,55 @@ Once you're done you should be able to see dashboards for both Kafka
 and Zookeeper:
 ![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/dashboard2.png)
 
+### Setting up NodePort routes (SKIP IF USING LOCAL DEPLOYMENT)
+Get the node port of the external bootstrap service
+```
+oc get service my-cluster-kafka-external-bootstrap -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
+```
 
-## Demo 1
+Get the node port of the my-cluster-kafka-n service
+```
+oc get service my-cluster-kafka-0 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
+oc get service my-cluster-kafka-1 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
+oc get service my-cluster-kafka-2 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
+```
+
+Output should look similar to below:
+```
+$ oc get service my-cluster-kafka-0 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
+32141
+$ oc get service my-cluster-kafka-1 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
+32473
+$ oc get service my-cluster-kafka-2 -n myproject -o=jsonpath='{.spec.ports[0].nodePort}{"\n"}'
+31259
+```
+
+Get a list of your your nodes:
+```
+$ oc get nodes
+NAME                                         STATUS    ROLES     AGE       VERSION
+ip-10-0-135-212.us-west-2.compute.internal   Ready     worker    4h30m     v1.14.0+011679b8e
+ip-10-0-136-104.us-west-2.compute.internal   Ready     master    4h39m     v1.14.0+011679b8e
+ip-10-0-152-25.us-west-2.compute.internal    Ready     master    4h39m     v1.14.0+011679b8e
+ip-10-0-158-227.us-west-2.compute.internal   Ready     worker    4h30m     v1.14.0+011679b8e
+ip-10-0-160-13.us-west-2.compute.internal    Ready     worker    4h30m     v1.14.0+011679b8e
+ip-10-0-170-164.us-west-2.compute.internal   Ready     master    4h39m     v1.14.0+011679b8e
+```
+
+Get the address of one of the nodes in your Kubernetes cluster (replace node-name with the name of one of your nodes - use kubectl get nodes to list all nodes):
+```
+kubectl get node ip-10-0-136-104.us-west-2.compute.internal -o=jsonpath='{range .status.addresses[*]}{.type}{"\t"}{.address}{"\n"}'
+```
+
+Output should look similar to below:
+```
+$ oc get node ip-10-0-136-104.us-west-2.compute.internal -o=jsonpath='{range .status.addresses[*]}{.type}{"\t"}{.address}{"\n"}'
+InternalIP	10.0.136.104
+InternalDNS	ip-10-0-136-104.us-west-2.compute.internal
+Hostname	ip-10-0-136-104.us-west-2.compute.internal
+```
+
+## Demo 1 - Using a Local Deployment
 To show a basic demo of producing and consuming individual messages you can use the commands below:
 
 To start a producer container where we can dynamically input messages:
@@ -164,13 +211,26 @@ To start a consumer container so we can see the received messages:
 oc run kafka-consumer -n myproject -ti --image=strimzi/kafka:0.12.1-kafka-2.2.1 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server my-cluster-kafka-bootstrap:9092 --topic my-topic1 --from-beginning
 ```
 
+## Demo 1 - Using a Multi-Node Deployment
+To show a basic demo of producing and consuming individual messages you can use the commands below:
+
+To start a producer container where we can dynamically input messages - replace the `--broker-list` entries with the `workerHostname`/`nodePort` values from earlier:
+```
+oc run kafka-producer -n myproject -ti --image=strimzi/kafka:0.12.1-kafka-2.2.1 --rm=true --restart=Never -- bin/kafka-console-producer.sh --broker-list <workerHostname>:<kafka-external-bootstrap_nodePort>,<workerHostname>:<kafka-broker-0_nodePort>,<workerHostname>:<kafka-broker-1_nodePort>,<workerHostname>:<kafka-broker-2_nodePort> --topic my-topic1
+```
+
+To start a consumer container so we can see the received messages - - replace the `--broker-list` entries with the `workerHostname`/`nodePort` values from earlier:
+```
+oc run kafka-consumer -ti -n myproject --image=strimzi/kafka:0.12.1-kafka-2.2.1 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server <workerHostname>:<kafka-external-bootstrap_nodePort> --topic my-topic1 --from-beginning
+```
+
 ## Demo 2
 We can also simulate a more real-world scenario by using a Job. Taking a look at the `job.yaml` we will note some parameters under `spec` that we can change to manipulate numbers of actors, and number of completions (each container instance serves as a "user" on our application)
 
 In our default example we want to have three actors at a given time, 100 total completions, and provide the requests and limits for container resources to be 150/250 respectively
 ```
 parallelism: 3
-completions: 200
+completions: 100
 resources:
   requests:
     memory: "150Mi"
@@ -247,16 +307,10 @@ oc edit -f my-topic1.yaml
 
 Run
 ```
-./uninstall-single.sh
+./uninstall.sh
 ```
 
 ### Manual Steps to Uninstall
-
-Removing the producers:
-```
-oc delete pod kafka-producer1 -n myproject
-oc delete pod kafka-producer2 -n myproject
-```
 
 Removing the consumers:
 ```

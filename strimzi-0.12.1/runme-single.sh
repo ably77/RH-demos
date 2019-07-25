@@ -12,19 +12,19 @@ oc create namespace ${NAMESPACE}
 oc apply -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/0.12.1/strimzi-cluster-operator-0.12.1.yaml -n ${NAMESPACE}
 
 ### Provision the Apache Kafka Cluster
-oc create -f kafka-cluster-single.yaml -n ${NAMESPACE}
+oc create -f yaml/kafka-cluster-single.yaml -n ${NAMESPACE}
 
 ### Create Kafka Topics
-oc create -f my-topic1.yaml
-oc create -f my-topic2.yaml
-oc create -f my-topic3.yaml
+oc create -f yaml/my-topic1.yaml
+oc create -f yaml/my-topic2.yaml
+oc create -f yaml/my-topic3.yaml
 
 ### Start up your Prometheus server
-oc create -f alerting-rules.yaml -n ${NAMESPACE}
-oc create -f prometheus.yaml -n ${NAMESPACE}
+oc create -f yaml/alerting-rules.yaml -n ${NAMESPACE}
+oc create -f yaml/prometheus.yaml -n ${NAMESPACE}
 
 ### start up your Grafana server
-oc create -f grafana.yaml -n ${NAMESPACE}
+oc create -f yaml/grafana.yaml -n ${NAMESPACE}
 echo
 echo "sleeping for 30 seconds to let grafana load"
 echo

@@ -4,8 +4,8 @@ metadata:
   name: "<MACHINESETID>"
   namespace: "openshift-machine-api"
 spec:
-  minReplicas: 1
-  maxReplicas: 6
+  minReplicas: <MINREPLICAS>
+  maxReplicas: <MAXREPLICAS>
   scaleTargetRef:
     apiVersion: machine.openshift.io/v1beta1
     kind: MachineSet

@@ -77,7 +77,7 @@ After that we feed Strimzi with a simple Custom Resource, which will than give y
 
 For our demo we will be using a single kafka broker that uses ephemeral storage and exposes Prometheus metrics:
 ```
-oc apply -f kafka-cluster-single.yaml -n myproject
+oc apply -f yaml/kafka-cluster-single.yaml -n myproject
 ```
 
 We can now watch the deployment on the myproject namespace, and see all required pods being created:
@@ -97,20 +97,20 @@ strimzi-cluster-operator-78f8bf857-kpmhb      1/1     Running   0          3m10s
 ### Create Topics
 Now that your cluster is up, you can create Kafka topics to which producers and consumers will subscribe to
 ```
-oc create -f my-topic1.yaml
-oc create -f my-topic2.yaml
+oc create -f yaml/my-topic1.yaml
+oc create -f yaml/my-topic2.yaml
 ```
 
 ## Monitoring using Prometheus and Grafana
 First start up your Prometheus server:
 ```
-oc create -f alerting-rules.yaml -n myproject
-oc create -f prometheus.yaml -n myproject
+oc create -f yaml/alerting-rules.yaml -n myproject
+oc create -f yaml/prometheus.yaml -n myproject
 ```
 
 Then start your Grafana server:
 ```
-oc create -f grafana.yaml -n myproject
+oc create -f yaml/grafana.yaml -n myproject
 ```
 
 Access the grafana dashboard by using port-forwarding. First get the name of your Grafana Pod using `oc get pods` and then replace the pod name like the command below
@@ -141,7 +141,7 @@ URL: http://prometheus:9090
 From the top left menu, click on "Dashboards" and then "Import" to open the "Import Dashboard" window
 ![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/grafana5.png)
 
-Paste/import the contents of `kafka-dashboard.json` located in the Dashboards directory of this repo
+Paste/import the contents of `dashboards/kafka-dashboard.json` located in the Dashboards directory of this repo
 ![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/grafana6.png)
 
 Select Prometheus in the drop-down as your data-source
@@ -197,22 +197,22 @@ In our default example we want to send our messages to the topic `my-topic1`, ea
 
 In order to run this demo just create the job which deploys a kafka producer writing messages to `my-topic1`
 ```
-oc create -f job1.yaml -n myproject
+oc create -f yaml/job1.yaml -n myproject
 ```
 
 To start a consumer for `my-topic1` messages
 ```
-oc create -f consumer1.yaml -n myproject
+oc create -f yaml/consumer1.yaml -n myproject
 ```
 
 If you want to demonstrate a second topic/producer combo running in parallel writing messages to `my-topic2`
 ```
-oc create -f job2.yaml -n myproject
+oc create -f yaml/job2.yaml -n myproject
 ```
 
 To start a consumer for `my-topic2` messages
 ```
-oc create -f consumer2.yaml -n myproject
+oc create -f yaml/consumer2.yaml -n myproject
 ```
 
 Navigate to the logs of a consumer to view incoming messages
@@ -240,12 +240,12 @@ oc get kafkatopic
 
 To scale your Kafka cluster up, add a broker using the commmand below and modify the `replicas:1 --> 2` for kafka brokers
 ```
-oc edit -f kafka-cluster.yaml -n myproject
+oc edit -f yaml/kafka-cluster.yaml -n myproject
 ```
 
 To edit your topic (i.e. adding topic parameters or scaling up partitions)
 ```
-oc edit -f my-topic1.yaml
+oc edit -f yaml/my-topic1.yaml
 ```
 
 ## Uninstall
@@ -271,33 +271,33 @@ oc delete pod kafka-consumer2 -n myproject
 
 Removing Jobs:
 ```
-oc delete -f job1.yaml -n myproject
-oc delete -f job2.yaml -n myproject
-oc delete -f job3.yaml -n myproject
-oc delete -f job4.yaml -n myproject
+oc delete -f yaml/job1.yaml -n myproject
+oc delete -f yaml/job2.yaml -n myproject
+oc delete -f yaml/job3.yaml -n myproject
+oc delete -f yaml/job4.yaml -n myproject
 ```
 
 Remove Kafka topics
 ```
-oc delete -f my-topic1.yaml
-oc delete -f my-topic2.yaml
-oc delete -f my-topic3.yaml
+oc delete -f yaml/my-topic1.yaml
+oc delete -f yaml/my-topic2.yaml
+oc delete -f yaml/my-topic3.yaml
 ```
 
 Delete Kafka Cluster
 ```
-oc delete -f kafka-cluster.yaml -n myproject
+oc delete -f yaml/kafka-cluster.yaml -n myproject
 ```
 
 Delete Prometheus:
 ```
-oc delete -f alerting-rules.yaml -n myproject
-oc delete -f prometheus.yaml -n myproject
+oc delete -f yaml/alerting-rules.yaml -n myproject
+oc delete -f yaml/prometheus.yaml -n myproject
 ```
 
 Delete Grafana:
 ```
-oc delete -f grafana.yaml -n myproject
+oc delete -f yaml/grafana.yaml -n myproject
 ```
 
 Remove Strimzi Operator

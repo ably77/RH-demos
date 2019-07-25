@@ -67,7 +67,7 @@ URL: http://prometheus:9090
 From the top left menu, click on "Dashboards" and then "Import" to open the "Import Dashboard" window
 ![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/grafana5.png)
 
-Paste/import the contents of `kafka-dashboard.json` located in the Dashboards directory this repo
+Paste/import the contents of `dashboards/kafka-dashboard.json` located in the Dashboards directory this repo
 ![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/grafana6.png)
 
 Select Prometheus in the drop-down as your data-source
@@ -100,16 +100,20 @@ The routing of the traffic is done by the kube-proxy Kubernetes component. It do
 
 The node port is selected from the port range 30000-32767 by default. But this range can be changed in Kubernetes configuration (see Kubernetes docs for more details about configuring the node port range).
 
-### Method 1: Setting up NodePort routes
+#### Setting up NodePort routes
 
 Take a look at your existing services, note that some components are exposed using type NodePort
 ```
 oc get services -n myproject
 ```
 
-The script below will set up three files in your directory named `job1.yaml`, `job2.yaml`, and `job3.yaml` that are configured correctly to use the NodePort services to route to the Kafka cluster brokers
+The script below will use the parameterized `job.template.yaml` and set up three files in your directory named `job1.yaml`, `job2.yaml`, and `job3.yaml` that are configured correctly to use the NodePort services to route to the Kafka cluster brokers
 ```
 ./setup-jobs.sh
+```
+
+If you open up the newly created files such as `job1.yaml` you will see the route populated, example below:
+```
 ```
 
 ## Demo 1 - Producing and consuming individual messages
@@ -117,12 +121,12 @@ To show a basic demo of producing and consuming individual messages you can use 
 
 To start a producer container where we can dynamically input messages
 ```
-./producer.sh
+./producer1.sh
 ```
 
 To start a consumer container so we can see the received messages
 ```
-./consumer.sh
+./consumer1.sh
 ```
 
 ## Demo 2 - Producing and consuming multiple messages
@@ -131,7 +135,7 @@ We can also simulate a more real-world scenario by using a Job. Taking a look at
 In our default example we want to have three actors at a given time, 200 total completions, and provide the requests and limits for container resources to be 150/250 respectively
 ```
 parallelism: 3
-completions: 100
+completions: 50
 resources:
   requests:
     memory: "150Mi"
@@ -143,12 +147,12 @@ resources:
 
 We can also manipulate the kafka-specific parameters under the `command` spec, this will allow us to send messages to other topics, increase the number of messages per actor, how large the messages are, and how quickly they come through:
 
-In our default example we want to send our messages to the topic `my-topic1`, each actor sending 10 messages, each message with a record size of 5 bytes, and at a throughput of 1000 messages/second maximum.
+In our default example we want to send our messages to the topic `my-topic1`, each actor sending 100000 messages, each message with a record size of 5 bytes, and at a throughput of 1M messages/second maximum.
 ```
 --topic my-topic1
---num-records 10
+--num-records 100000
 --record-size 5
---throughput 1000
+--throughput 1000000
 ```
 
 ### Create your job files
@@ -212,7 +216,7 @@ SSXVNJHPDQ
 ```
 
 ## Bonus:
-Navigate to the Openshift UI and demo through all of the dynamic changes, monitoring, resource consumption, etc.
+Navigate to the Openshift UI and demo through all of the orchestration of pods, jobs, monitoring, resource consumption, etc.
 ![](https://github.com/ably77/RH-demos/blob/master/strimzi-0.12.1/resources/openshift1.png)
 
 If you are using Openshift 4 you can also see additional cluster level metrics for pods, for example our kafka broker `kafka-cluster-0`
@@ -231,12 +235,12 @@ oc get kafkatopic
 
 To scale your Kafka cluster up, add a broker using the commmand below and modify the `replicas:1 --> 2` for kafka brokers
 ```
-oc edit -f kafka-cluster.yaml -n myproject
+oc edit -f yaml/kafka-cluster-3broker.yaml -n myproject
 ```
 
 To edit your topic (i.e. adding topic parameters or scaling up partitions)
 ```
-oc edit -f my-topic1.yaml
+oc edit -f yaml/my-topic1.yaml
 ```
 
 ## Uninstall
@@ -256,32 +260,32 @@ oc delete pod kafka-consumer2 -n myproject
 
 Removing Jobs:
 ```
-oc delete -f job1.yaml -n myproject
-oc delete -f job2.yaml -n myproject
-oc delete -f job3.yaml -n myproject
+oc delete -f yaml/job1.yaml -n myproject
+oc delete -f yaml/job2.yaml -n myproject
+oc delete -f yaml/job3.yaml -n myproject
 ```
 
 Remove Kafka topics
 ```
-oc delete -f my-topic1.yaml
-oc delete -f my-topic2.yaml
-oc delete -f my-topic3.yaml
+oc delete -f yaml/my-topic1.yaml
+oc delete -f yaml/my-topic2.yaml
+oc delete -f yaml/my-topic3.yaml
 ```
 
 Delete Kafka Cluster
 ```
-oc delete -f kafka-cluster-3broker.yaml -n myproject
+oc delete -f yaml/kafka-cluster-3broker.yaml -n myproject
 ```
 
 Delete Prometheus:
 ```
-oc delete -f alerting-rules.yaml -n myproject
-oc delete -f prometheus.yaml -n myproject
+oc delete -f yaml/alerting-rules.yaml -n myproject
+oc delete -f yaml/prometheus.yaml -n myproject
 ```
 
 Delete Grafana:
 ```
-oc delete -f grafana.yaml -n myproject
+oc delete -f yaml/grafana.yaml -n myproject
 ```
 
 Remove Strimzi Operator

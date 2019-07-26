@@ -10,7 +10,7 @@ spec:
       containers:
       - name: <PRODUCERNAME>
         image: confluentinc/cp-kafka:5.0.0
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         resources:
           requests:
             memory: "250Mi"

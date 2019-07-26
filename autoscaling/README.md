@@ -68,13 +68,13 @@ REF: https://docs.openshift.com/container-platform/4.1/machine_management/applyi
 Once your MachineSets have been created it is possible to set up Cluster AutoScaling using the Cluster Autoscaler Operator. Since the Cluster AutoScaler operates cluster-wide, it defines a global setting for the min/max cores, memory, and nodes for the entire cluster.
 
 ### Deploy the ClusterAutoscaler
-Use the script called `setup_clusterautoscaler.sh` in order to create a new machine autoscaler based off of the `machineautoscaler.template.yaml`. Using a text editor of choice, edit the file and replace the variable values to desired values. See example below
+Use the script called `setup_clusterautoscaler.sh` in order to create a new cluster autoscaler based off of the `clusterautoscaler.template.yaml`. The default values are set for this demo to the parameters below, but you can change any values as you see fit.
 ```
-maxnodestotal=6
-cores_min=4
-cores_max=24
-mem_min=4
-mem_max=32
+maxnodestotal=15
+cores_min=6
+cores_max=30
+mem_min=24
+mem_max=120
 scaledown_enabled=true
 ```
 
@@ -91,21 +91,14 @@ oc create -f clusterautoscaler.yaml
 ### Configure MachineAutoscaler
 The MachineAutoscaler resource additionally allows more granular control of how kubernetes autoscales specific MachineSets. This allows us to set more specific min/max replicas for specific MachineSet groups. For example, I want resources to scale more in zone A because my limit of EC2 instances in zone A is 20, whereas in Zone B it is only 10. A MachineAutoscaler resource needs to be created for each MachineSet in your cluster that you want to autoscale
 
-Use the script called `setup_machineautoscaler.sh` in order to create a new machine autoscaler based off of the `machineautoscaler.template.yaml`. Using a text editor of choice, edit the file and replace the `machinesetid` value with the name of the desired MachineSet you want to have autoscale as well as the desired `minReplicas` and `maxReplicas` See example below
+Run the script to create your new MachineSets. The script below is templated and will generate 4 machineAutoscalers (typically zone a,b,c,d)
 ```
-machinesetid=ly-cluster-wcqcb-worker-us-west-2a
-minreplicas=1
-maxreplicas=6
-```
-
-Once complete, run the script to create your new MachineSet
-```
-./setup_machineset.sh
+./setup_machineautoscaler.sh
 ```
 
 To create the MachineSet
 ```
-oc create -f <machineset_name.yaml>
+oc create -f <machineautoscaler_name.yaml>
 ```
 
 To view existing MachineAutoscalers

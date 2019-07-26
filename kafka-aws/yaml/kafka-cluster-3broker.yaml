@@ -24,6 +24,7 @@ spec:
       transaction.state.log.min.isr: 2
       log.message.format.version: "2.2"
       log.retention.minutes: 5
+      log.retention.check.interval.ms: 200000
       log.segment.bytes: 80000000
     storage:
       type: ephemeral

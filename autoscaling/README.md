@@ -78,7 +78,12 @@ mem_max=32
 scaledown_enabled=true
 ```
 
-Deploy the clusterAutoscaler
+Generate the clusterAutoscaler.yaml file with this script
+```
+./setup_clusterautoscaler.sh
+```
+
+Deploy the clusterautoscaler.yaml that was created
 ```
 oc create -f clusterautoscaler.yaml
 ```

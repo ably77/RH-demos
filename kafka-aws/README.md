@@ -112,8 +112,9 @@ The script below will use the parameterized `job.template.yaml` and set up three
 ./setup-jobs.sh
 ```
 
-If you open up the newly created files such as `job1.yaml` you will see the route populated, example below:
+If you open up the newly created files such as `job1.yaml` you will see the route populated with the correct hostname:nodePort, example below:
 ```
+bootstrap.servers=ip-10-0-135-104.us-west-2.compute.internal:31316,ip-10-0-135-104.us-west-2.compute.internal:32283,ip-10-0-135-104.us-west-2.compute.internal:31803,ip-10-0-135-104.us-west-2.compute.internal:32289
 ```
 
 ## Demo 1 - Producing and consuming individual messages
@@ -172,7 +173,7 @@ oc create -f job1.yaml -n myproject
 
 To start a consumer for `my-topic1` messages
 ```
-oc create -f consumer1.yaml -n myproject
+./consumer1.sh
 ```
 
 If you want to demonstrate a second topic/producer combo running in parallel writing messages to `my-topic2`
@@ -182,7 +183,7 @@ oc create -f job2.yaml -n myproject
 
 To start a consumer for `my-topic2` messages
 ```
-oc create -f consumer2.yaml -n myproject
+./consumer2.sh
 ```
 
 Navigate to the logs of a consumer to view incoming messages

@@ -4,7 +4,7 @@
 oc new-app mysql-ephemeral --name mysql
 
 ## Wait for mysql to deploy
-sleep 30
+./check-pod-status.sh mysql default
 
 ### set mysql pod variable
 mpod=$(oc get pods --selector app=mysql --output name | awk -F/ '{print $NF}')

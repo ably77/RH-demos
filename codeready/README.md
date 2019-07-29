@@ -12,6 +12,12 @@ Because the default deployment defaults to `Self-signed-certs: True`, run the sc
 ./oauth-certs-enable.sh
 ```
 
+Create a project called `workspaces` and set project
+```
+oc create namespace workspaces
+oc project workspaces
+```
+
 On an authenticated cluster with a user that has cluster-admin privileges, run the command below to deploy the CodeReady Workspaces Operator and Eclipse Che Cluster
 ```
 ./codeready-workspaces-operator-installer/deploy.sh --deploy

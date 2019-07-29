@@ -9,7 +9,7 @@
 
 To run the default install
 ```
-./openshift-install create cluster --dir=<installation_directory> --log-level debug
+./bin/openshift-install create cluster --dir=<installation_directory> --log-level debug
 ```
 
 To create a custom install config

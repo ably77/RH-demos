@@ -26,12 +26,14 @@ oc create -f yaml/prometheus.yaml -n ${NAMESPACE}
 
 ### start up your Grafana server
 oc create -f yaml/grafana.yaml -n ${NAMESPACE}
+
+### Wait for grafana to deploy
+./check-status-with-name.sh grafana myproject
+
 echo
-echo "sleeping for 45 seconds to let grafana load"
 echo
 echo "Point your browser to http://localhost:3000 once the port-forward is initiated and login using admin/admin"
 echo
-sleep 45
 
 ### Display grafana pod name
 grafanapod=`oc get pods -n ${NAMESPACE} | awk 'NR > 1 { printf "%s\n", $1 }' | grep grafana`

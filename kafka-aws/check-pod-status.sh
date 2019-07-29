@@ -13,5 +13,6 @@ while [ "$OUTPUT" -ne 1 ]; do
   seconds=$((seconds+5))
   printf "Waiting %s seconds for ${pod_name} to come up.\n" "${seconds}"
   sleep 5
-  echo $pod_name is up and Running!
 done
+
+echo $pod_name is up and Running!

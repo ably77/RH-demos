@@ -28,7 +28,7 @@ oc create -f yaml/prometheus.yaml -n ${NAMESPACE}
 oc create -f yaml/grafana.yaml -n ${NAMESPACE}
 
 ### Wait for grafana to deploy
-./check-status-with-name.sh grafana myproject
+./check-pod-status.sh grafana myproject
 
 echo
 echo

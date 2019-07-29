@@ -50,10 +50,10 @@ Once complete, open Grafana and login as `admin/admin`
 ```
 open http://localhost:3000
 ```
-![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/grafana1.jpg)
+![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/grafana1.png)
 
 Click on the "Add data Source" icon in the Grafana Homepage
-![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/grafana2.jpg)
+![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/grafana2.png)
 
 Add Prometheus as a datasource, specifying the information below and select Save & Test at the bottom
 ```
@@ -62,16 +62,16 @@ Type: Prometheus
 URL: http://prometheus:9090
 ```
 
-![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/grafana4.jpg)
+![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/grafana4.png)
 
 From the top left menu, click on "Dashboards" and then "Import" to open the "Import Dashboard" window
-![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/grafana5.jpg)
+![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/grafana5.png)
 
 Paste/import the contents of `dashboards/kafka-dashboard.json` located in the Dashboards directory this repo
-![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/grafana6.jpg)
+![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/grafana6.png)
 
 Select Prometheus in the drop-down as your data-source
-![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/grafana7.jpg)
+![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/grafana7.png)
 
 Now, repeat these steps for importing the Zookeeper dashboard
 

@@ -1,7 +1,7 @@
 
 #!/bin/bash
 
-password=nothing
+password=nothing1
 
 # Login as admin
 oc login -u system:admin

@@ -159,7 +159,7 @@ In our default example we want to send our messages to the topic `my-topic1`, ea
 ### Create your job files
 A producer has been templatized into the example `job.template.yaml` file from which we will generate `job1.yaml`, `job2.yaml`, and `job3.yaml`
 ```
-./setup-jobs.sh
+./setup_jobs.sh
 ```
 
 Running this script will grab and set the correct variables for `<NODEIP>`,`<nodePort>` because these parameters will be different per each deployment
@@ -168,7 +168,7 @@ Running this script will grab and set the correct variables for `<NODEIP>`,`<nod
 
 Deploy the `job1.yaml` which deploys a kafka producer writing messages to `my-topic1`
 ```
-oc create -f job1.yaml -n myproject
+oc create -n myproject -f job1.yaml
 ```
 
 To start a consumer for `my-topic1` messages
@@ -178,7 +178,7 @@ To start a consumer for `my-topic1` messages
 
 If you want to demonstrate a second topic/producer combo running in parallel writing messages to `my-topic2`
 ```
-oc create -f job2.yaml -n myproject
+oc create -n myproject -f job2.yaml
 ```
 
 To start a consumer for `my-topic2` messages
@@ -188,13 +188,13 @@ To start a consumer for `my-topic2` messages
 
 Navigate to the logs of a consumer to view incoming messages
 ```
-oc logs kafka-consumer1 -n myproject
-oc logs kafka-consumer2 -n myproject
+oc logs -n myproject kafka-consumer1
+oc logs -n myproject kafka-consumer2
 ```
 
 A single kafka topic can also handle many Producers sending many different messages to it, to demonstrate this you can run `job3.yaml`
 ```
-oc create -f job3.yaml -n myproject
+oc create -n myproject -f job3.yaml
 ```
 
 Taking a look at the `job3.yaml` compared to `job1.yaml` you can see that the only difference is in record-size
@@ -215,6 +215,50 @@ SSXVNJHPDQ
 SSXVNJHPDQ
 SSXVNJHPDQ
 ```
+
+## Demo 3 - Running a Producer on a Schedule
+We may have a scenario where a worker runs on a set schedule to produce messages to a particular topic to be ingested. We can simulate this scenario using the instructions below
+
+### Create your CronJob files
+
+Take a look at the `setup_cron.sh` and see the parameters that can be manipulated
+```
+namespace=myproject
+cron_schedule='*/2 * * * *'
+
+## job1 Variables (Optional)
+job1_parallelism=2
+job1_completions=4
+job1_topic=my-topic1
+
+## job2 Variables (Optional)
+job2_parallelism=2
+job2_completions=4
+job2_topic=my-topic2
+
+## job3 Variables (Optional)
+job3_parallelism=2
+job3_completions=4
+job3_topic=my-topic1
+```
+
+A producer has been templatized into the example `cronjob.template.yaml` file from which we will generate `cron_job1.yaml`, `cron_job2.yaml`, and `cron_job3.yaml`
+```
+./setup_cron.sh
+```
+
+### Running the Demo
+Deploy the CronJobs which deploy a kafka producer writing messages to the topic specified in the variables
+```
+oc create -n myproject -f job1.yaml
+oc create -n myproject -f job2.yaml
+oc create -n myproject -f job3.yaml
+```
+By default, this will set up up a CronJob which will deploy a job every 2 minutes with a parallelism of 2 and completions of 4. You can visualize the dynamic job creation through the Jobs tab in the Openshift Console as well as through the Strimzi Dashboard we built earlier
+
+![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/cron1.png)
+
+![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/cron2.png)
 
 ## Bonus:
 Navigate to the Openshift UI and demo through all of the orchestration of pods, jobs, monitoring, resource consumption, etc.

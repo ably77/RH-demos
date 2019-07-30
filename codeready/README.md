@@ -125,5 +125,5 @@ Here, $targetNamespace is an OpenShift project with deployed CodeReady Workspace
 
 #### Uninstalling the CodeReady Workspace Operator
 ```
-oc delete deployment codeready-operator -n $targetNamespace
+kubectl delete daemonsets,replicasets,services,deployments,pods,rc --all --namespace workspaces
 ```

@@ -17,9 +17,9 @@ oc delete -f cron_job2.yaml -n ${NAMESPACE}
 oc delete -f cron_job3.yaml -n ${NAMESPACE}
 
 # Remove Kafka Topics
-oc delete -f yaml/my-topic1.yaml
-oc delete -f yaml/my-topic2.yaml
-oc delete -f yaml/my-topic3.yaml
+oc delete -f yaml/my-topic1.yaml -n ${NAMESPACE}
+oc delete -f yaml/my-topic2.yaml -n ${NAMESPACE}
+oc delete -f yaml/my-topic3.yaml -n ${NAMESPACE}
 
 # Delete Kafka Cluster
 oc delete -f yaml/kafka-cluster-3broker.yaml -n ${NAMESPACE}

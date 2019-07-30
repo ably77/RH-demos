@@ -4,7 +4,7 @@ metadata:
   name: <PRODUCERNAME>
   namespace: <NAMESPACE>
 spec:
-  schedule: '*/5 * * * *'
+  schedule: '*/3 * * * *'
   concurrencyPolicy: Allow
   jobTemplate:
     spec:

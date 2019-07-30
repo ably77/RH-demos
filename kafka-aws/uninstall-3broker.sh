@@ -7,9 +7,14 @@ oc delete pod kafka-consumer1 -n ${NAMESPACE}
 oc delete pod kafka-consumer2 -n ${NAMESPACE}
 
 # Removing Jobs
-oc delete -f yaml/job1.yaml -n ${NAMESPACE}
-oc delete -f yaml/job2.yaml -n ${NAMESPACE}
-oc delete -f yaml/job3.yaml -n ${NAMESPACE}
+oc delete -f job1.yaml -n ${NAMESPACE}
+oc delete -f job2.yaml -n ${NAMESPACE}
+oc delete -f job3.yaml -n ${NAMESPACE}
+
+# Removing Cron jobs
+oc delete -f cron_job1.yaml -n ${NAMESPACE}
+oc delete -f cron_job2.yaml -n ${NAMESPACE}
+oc delete -f cron_job3.yaml -n ${NAMESPACE}
 
 # Remove Kafka Topics
 oc delete -f yaml/my-topic1.yaml

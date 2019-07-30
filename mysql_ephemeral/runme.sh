@@ -1,5 +1,8 @@
 #!/bin/bash
 
+### Use default project space
+oc project default
+
 ### Deploy mysql
 oc new-app mysql-ephemeral --name mysql
 

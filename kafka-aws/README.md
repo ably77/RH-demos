@@ -224,7 +224,6 @@ We may have a scenario where a worker runs on a set schedule to produce messages
 Take a look at the `setup_cron.sh` and see the parameters that can be manipulated
 ```
 namespace=myproject
-cron_schedule='*/2 * * * *'
 
 ## job1 Variables (Optional)
 job1_parallelism=2

@@ -6,11 +6,13 @@ spec:
   # Add fields here
   size: 1
   state: present
+  # compute
+  cpurequest: 512m
+  memrequest: 1024Mi
+  cpulimit: 1024m
+  memlimit: 2048Mi
   # storage
   claim: ubi7-pvc1
-  # networking
-  port: 8080
-  targetport: 9376
   # Sample definition below where some 'extra vars' are passed via the spec
   # Passing 'extra vars' through the CR allows for customization of Ansible logic based on the contents of each CR instance.
   #key: "value"

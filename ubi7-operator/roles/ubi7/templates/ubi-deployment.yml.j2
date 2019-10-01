@@ -1,0 +1,48 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: "{{ meta.name }}"
+  name: "{{ meta.name }}"
+  namespace: "{{ meta.namespace }}"
+spec:
+  replicas: "{{size}}"
+  selector:
+    matchLabels:
+      app: "{{ meta.name }}"
+  template:
+    metadata:
+      labels:
+        app: "{{ meta.name }}"
+    spec:
+      containers:
+        -
+          args:
+            - "-c"
+            - "while true; do echo $(date -u) >> /data/out.txt; sleep 1; done"
+          command:
+            - /bin/sh
+          image: registry.access.redhat.com/ubi7/ubi
+          imagePullPolicy: Always
+          name: "{{ meta.name }}"
+          ports:
+            -
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            -
+              mountPath: /data
+              name: ubi-volume
+      resources:
+        limits:
+          cpu: "{{cpulimit}}"
+          memory: "{{memlimit}}"
+        requests:
+          cpu: "{{cpurequest}}"
+          memory: "{{memrequest}}"
+      volumes:
+        -
+          name: ubi-volume
+          persistentVolumeClaim:
+            claimName: "{{claim}}"

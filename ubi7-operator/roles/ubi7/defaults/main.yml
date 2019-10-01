@@ -1,5 +1,9 @@
 ---
 # defaults file for ubi7
 size: 1
-port: 8080
-targetport: 9376
+state: present
+cpurequest: 512m
+memrequest: 1024Mi
+cpulimit: 1024m
+memlimit: 2048Mi
+claim: ubi7-pvc1

@@ -23,6 +23,13 @@
             containers:
             - name: "{{ meta.name }}"
               image: registry.access.redhat.com/ubi7/ubi
+              resources:
+                limits:
+                  cpu: "{{cpulimit}}"
+                  memory: "{{memlimit}}"
+                requests:
+                  cpu: "{{cpurequest}}"
+                  memory: "{{memrequest}}"
               command: ["/bin/sh"]
               args: ["-c", "while true; do echo $(date -u) >> /data/out.txt; sleep 1; done"]
               volumeMounts:
@@ -32,6 +39,8 @@
             - name: ubi-volume
               persistentVolumeClaim:
                 claimName: "{{claim}}"
+
+
 
 - name: "create service"
   k8s:

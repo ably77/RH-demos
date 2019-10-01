@@ -1,5 +1,7 @@
 #!/bin/bash
 
+./import.sh
+
 oc new-project ubi7-operator
 
 oc create -f deploy/crds/ubi7-crd.yaml

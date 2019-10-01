@@ -13,7 +13,7 @@ oc create -f deploy/operator.yaml \
 
 ./check-pod-status.sh ubi7-operator ubi7-operator
 
-#oc create -f storage/aws
-oc create -f storage/minishift
+oc create -f storage/aws
+#oc create -f storage/minishift
 
 oc create -n ubi7-operator -f deploy/crds/ubi7-cr1.yaml

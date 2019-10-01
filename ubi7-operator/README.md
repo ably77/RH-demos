@@ -57,11 +57,13 @@ oc edit -f deploy/crds/ubi7-cr1.yaml
 ```
 size: # of ubi7 replicas in the deployment
 state: present/absent
+# Compute
+cpurequest: container cpu request (ex: 512m)
+memrequest: container mem request (ex: 1024Mi)
+cpulimit: container cpu limit (ex: 1024m)
+memlimit: container mem limit (ex: 2048Mi)
 # Storage
 claim: Name of persistentVolume claim
-# Networking
-port: port that get exposed by the container
-targetport: the actual port on which your application is running inside the container
 ```
 
 ## Uninstalling

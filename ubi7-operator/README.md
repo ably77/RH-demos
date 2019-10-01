@@ -11,12 +11,12 @@ Once completed with modifying any /roles/ubi7/tasks move on to building your ope
 First build locally:
 ```
 user=<quay_username>
-operator-sdk build quay.io/${user}/ubi7-operator:v0.1
+operator-sdk build quay.io/${user}/ubi7-operator:v0.01
 ```
 
 Push to quay.io:
 ```
-docker push quay.io/${user}/ubi7-operator:v0.1
+docker push quay.io/${user}/ubi7-operator:v0.01
 ```
 
 Modify your deploy/operator.yaml to match your Operator image:tag
@@ -27,7 +27,7 @@ spec:
       containers:
         - name: ubi7-operator
           # Replace this with the built image name
-          image: quay.io/<USER_NAME>/openshift-ubi7-operator:v0.1
+          image: quay.io/<USER_NAME>/openshift-ubi7-operator:v0.01
           imagePullPolicy: Always
 <...>
 ```
@@ -50,17 +50,21 @@ oc edit ubi7
 
 or
 
-oc edit -f deploy/crds/ubi7-cr.yaml
+oc edit -f deploy/crds/ubi7-cr1.yaml
 ```
 
 ### Variables to Manipulate
 ```
 size: # of ubi7 replicas in the deployment
 state: present/absent
+# Storage
 claim: Name of persistentVolume claim
+# Networking
+port: port that get exposed by the container
+targetport: the actual port on which your application is running inside the container
 ```
 
 ## Uninstalling
 ```
-oc delete project ubi7-operator
+./uninstall.sh
 ```

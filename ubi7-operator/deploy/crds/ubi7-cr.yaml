@@ -1,0 +1,14 @@
+apiVersion: ubi.operator.redhat.io/v1
+kind: Ubi7
+metadata:
+  name: example1-ubi7
+spec:
+  # Add fields here
+  size: 1
+  state: present
+  claim: ubi7-pvc1
+  # Sample definition below where some 'extra vars' are passed via the spec
+  # Passing 'extra vars' through the CR allows for customization of Ansible logic based on the contents of each CR instance.
+  #key: "value"
+#annotations:
+  #ansible.operator-sdk/reconcile-period: "30s"

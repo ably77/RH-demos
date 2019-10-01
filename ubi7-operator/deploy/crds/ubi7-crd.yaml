@@ -1,0 +1,19 @@
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: ubi7s.ubi.operator.redhat.io
+spec:
+  group: ubi.operator.redhat.io
+  names:
+    kind: Ubi7
+    listKind: Ubi7List
+    plural: ubi7s
+    singular: ubi7
+  scope: Namespaced
+  subresources:
+    status: {}
+  version: v1
+  versions:
+  - name: v1
+    served: true
+    storage: true

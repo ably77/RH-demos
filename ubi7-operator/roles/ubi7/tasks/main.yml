@@ -1,0 +1,34 @@
+---
+-
+  k8s:
+    state: "{{ state }}"
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: "{{ meta.name }}"
+        labels:
+          app: "{{ meta.name }}"
+        namespace: "{{ meta.namespace }}"
+      spec:
+        replicas: "{{size}}"
+        selector:
+          matchLabels:
+            app: "{{ meta.name }}"
+        template:
+          metadata:
+            labels:
+              app: "{{ meta.name }}"
+          spec:
+            containers:
+            - name: "{{ meta.name }}"
+              image: registry.access.redhat.com/ubi7/ubi
+              command: ["/bin/sh"]
+              args: ["-c", "while true; do echo $(date -u) >> /data/out.txt; sleep 1; done"]
+              volumeMounts:
+              - name: ubi-volume
+                mountPath: /data
+            volumes:
+            - name: ubi-volume
+              persistentVolumeClaim:
+                claimName: "{{claim}}"

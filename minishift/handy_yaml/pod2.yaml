@@ -1,0 +1,20 @@
+apiVersion: "v1"
+kind: "Pod"
+metadata:
+  name: "mypod2"
+  labels:
+    name: "frontendhttp2"
+spec:
+  containers:
+    -
+      name: "myfrontend2"
+      image: openshift/hello-openshift
+      ports:
+        -
+          containerPort: 81
+          name: "http-server2"
+  volumes:
+    -
+      name: "pvol"
+      persistentVolumeClaim:
+        claimName: "claim2"

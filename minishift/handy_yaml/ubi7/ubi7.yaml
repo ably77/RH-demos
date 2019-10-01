@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ubi7
+  labels:
+    app: ubi7
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ubi7
+  template:
+    metadata:
+      labels:
+        app: ubi7
+    spec:
+      containers:
+      - name: ubi7
+        image: registry.access.redhat.com/ubi7/ubi
+        command: ["/bin/sh"]
+        args: ["-c", "while true; do echo $(date -u) >> /data/out.txt; sleep 1; done"]
+        volumeMounts:
+        - name: test-volume
+          mountPath: /data
+      volumes:
+      - name: test-volume
+        persistentVolumeClaim:
+          claimName: ubi7-pvc1

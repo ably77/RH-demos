@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: centos
+  labels:
+    app: centos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: centos
+  template:
+    metadata:
+      labels:
+        app: centos
+    spec:
+      containers:
+      - name: centos
+        image: centos:7
+        command: ["/bin/sh"]
+        args: ["-c", "sleep 3000"]
+        volumeMounts:
+        - name: persistent-storage
+          mountPath: /data
+      volumes:
+      - name: persistent-storage
+        persistentVolumeClaim:
+          claimName: helloworld-pv1

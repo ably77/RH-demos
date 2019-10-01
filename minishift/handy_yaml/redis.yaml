@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  labels:
+    app: redis
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis
+        #command: ["/bin/sh"]
+        #args: ["-c", "sleep 3000"]
+        volumeMounts:
+        - name: redis-storage
+          mountPath: /data/redis
+      volumes:
+      - name: redis-storage
+        emptyDir: {}

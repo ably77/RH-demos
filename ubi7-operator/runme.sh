@@ -1,8 +1,8 @@
 #!/bin/bash
 
-./import.sh
-
 oc new-project ubi7-operator
+
+./import.sh
 
 oc create -f deploy/crds/ubi7-crd.yaml
 
@@ -16,4 +16,4 @@ oc create -f deploy/operator.yaml \
 #oc create -f storage/aws
 oc create -f storage/minishift
 
-oc create -n ubi7-operator -f deploy/crds/ubi7-cr.yaml
+oc create -n ubi7-operator -f deploy/crds/ubi7-cr1.yaml

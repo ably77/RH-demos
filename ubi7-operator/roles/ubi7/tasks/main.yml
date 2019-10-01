@@ -1,5 +1,5 @@
 ---
-- name: "create deployment config"
+- name: "create deployment"
   k8s:
     state: "{{ state }}"
     definition:
@@ -32,3 +32,22 @@
             - name: ubi-volume
               persistentVolumeClaim:
                 claimName: "{{claim}}"
+
+- name: "create service"
+  k8s:
+    state: "{{ state }}"
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        labels:
+          app: "{{ meta.name }}"
+        name: "{{ meta.name }}-service"
+        namespace: "{{ meta.namespace }}"
+      spec:
+        selector:
+          app: "{{ meta.name }}"
+        ports:
+          - protocol: TCP
+            port: "{{port}}"
+            targetPort: "{{targetport}}"

@@ -27,7 +27,7 @@ Use the script called `setup_machineset.sh` in order to create a new machine set
 worker_node=ly-demo-jv56h-worker-us-east-1a
 ```
 
-##grep for clusterID
+## grep for clusterID
 ```
 oc get machineset -n openshift-machine-api $worker_node -o yaml | grep machine.openshift.io/cluster-api-cluster:
 ```

@@ -24,7 +24,7 @@ Use the script called `setup_machineset.sh` in order to create a new machine set
 
 ## Set worker_node variable
 ```
-worker_node=ly-demo-jv56h-worker-us-east-1a
+worker_node=$(oc get machinesets -n openshift-machine-api | awk 'NR==2{ print $1 }')
 ```
 
 ## grep for clusterID
@@ -39,12 +39,12 @@ oc get machineset -n openshift-machine-api $worker_node -o yaml | grep ami
 
 ## Modify values in setup_infra_machineset.sh
 ```
-clusterid=ly-demo-jv56h
-role=infra
-instancetype=t3.large
-region=us-east-1
-zone=b
-ami_id=ami-01e7fdcb66157b224
+clusterid=<CLUSTER_NAME> (i.e. ly-demo-jv56h)
+ami_id=<AMI_ID> (i.e. ami-12345678)
+role=<worker/infra>
+instancetype=<INSTANCE_TYPE> (i.e. t3.large)
+region=<REGION> (i.e. us-east-1)
+zone=<ZONE> (i.e. a,b,c,d)
 desired_replicas=1
 ```
 

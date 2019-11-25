@@ -143,3 +143,4 @@ strimzi-0.12.1/openshift.local.clusterup/static-pod-manifests/apiserver.yaml
 strimzi-0.12.1/openshift.local.clusterup/static-pod-manifests/etcd.yaml
 strimzi-0.12.1/openshift.local.clusterup/static-pod-manifests/kube-controller-manager.yaml
 strimzi-0.12.1/openshift.local.clusterup/static-pod-manifests/kube-scheduler.yaml
+etcd-operator/etcd-operator/

@@ -1,0 +1,59 @@
+apiVersion: machine.openshift.io/v1beta1
+kind: MachineSet
+metadata:
+  labels:
+    machine.openshift.io/cluster-api-cluster: ly-demo-9lgjl
+  name: ly-demo-9lgjl-infra-us-east-1c
+  namespace: openshift-machine-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      machine.openshift.io/cluster-api-cluster: ly-demo-9lgjl
+      machine.openshift.io/cluster-api-machineset: ly-demo-9lgjl-infra-us-east-1c
+  template:
+    metadata:
+      labels:
+        machine.openshift.io/cluster-api-cluster: ly-demo-9lgjl
+        machine.openshift.io/cluster-api-machine-role: infra
+        machine.openshift.io/cluster-api-machine-type: infra
+        machine.openshift.io/cluster-api-machineset: ly-demo-9lgjl-infra-us-east-1c
+    spec:
+      metadata:
+        labels:
+          node-role.kubernetes.io/infra: ""
+      providerSpec:
+        value:
+          ami:
+            id: ami-01e7fdcb66157b224
+          apiVersion: awsproviderconfig.openshift.io/v1beta1
+          blockDevices:
+            - ebs:
+                iops: 0
+                volumeSize: 120
+                volumeType: gp2
+          credentialsSecret:
+            name: aws-cloud-credentials
+          deviceIndex: 0
+          iamInstanceProfile:
+            id: ly-demo-9lgjl-worker-profile
+          instanceType: t3.xlarge
+          kind: AWSMachineProviderConfig
+          placement:
+            availabilityZone: us-east-1c
+            region: us-east-1
+          securityGroups:
+            - filters:
+                - name: tag:Name
+                  values:
+                    - ly-demo-9lgjl-worker-sg
+          subnet:
+            filters:
+              - name: tag:Name
+                values:
+                  - ly-demo-9lgjl-private-us-east-1c
+          tags:
+            - name: kubernetes.io/cluster/ly-demo-9lgjl
+              value: owned
+          userDataSecret:
+            name: worker-user-data

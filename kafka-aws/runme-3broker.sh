@@ -2,12 +2,8 @@
 
 NAMESPACE=myproject
 
-### Login as admin
-oc login -u system:admin
-
 ### Create the project namespace
-oc create namespace ${NAMESPACE}
-oc project ${NAMESPACE}
+oc new-project ${NAMESPACE}
 
 ### Apply Strimzi Installation File
 oc apply -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/0.12.1/strimzi-cluster-operator-0.12.1.yaml -n ${NAMESPACE}
@@ -27,8 +23,16 @@ oc create -f yaml/prometheus.yaml -n ${NAMESPACE}
 ### start up your Grafana server
 oc create -f yaml/grafana.yaml -n ${NAMESPACE}
 
-### Wait for grafana to deploy
+### sleep
+echo sleeping for 45 seconds
+sleep 45
+
+### status check for grafana deployment
 ./check-pod-status.sh grafana myproject
+
+### setup jobs with correct NodeIP service addresses
+./setup_cron.sh
+./setup_jobs.sh
 
 echo
 echo

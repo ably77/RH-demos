@@ -32,25 +32,19 @@ oc create -f grafana-operator/deploy/roles -n ${NAMESPACE}
 ### deploy grafana operator
 oc create -f grafana-operator/deploy/operator.yaml -n ${NAMESPACE}
 
-### deploy grafana
-oc create -f grafana-operator/deploy/examples/GrafanaWithIngressHost.yaml -n ${NAMESPACE}
-
 ### deploy grafana datasource
 oc create -f grafana-operator/deploy/examples/datasources/Prometheus.yaml -n ${NAMESPACE}
+
+### deploy grafana
+oc create -f grafana-operator/deploy/examples/GrafanaWithIngressHost.yaml -n ${NAMESPACE}
 
 ### deploy dashboard
 ### currently not working due to Issue #75 https://github.com/integr8ly/grafana-operator/issues/75 - must be done manually for now
 
 #oc create -f deploy/examples/dashboards/kafka-dashboard.yaml -n ${NAMESPACE}
 
-### check grafana deployment status
-./extras/check-pod-status.sh grafana-deployment myproject
-
-### open grafana route
-open https://$(oc get routes | grep grafana-route | awk '{ print $2 }')
-
 ### check kafka deployment status
-./extras/check-pod-status.sh my-cluster-kafka-2 myproject
+./extras/check-pod-status.sh my-cluster-kafka-exporter myproject Running
 
 ### setup kafka jobs with correct NodeIP service addresses
 ./setup_cron.sh
@@ -60,8 +54,15 @@ open https://$(oc get routes | grep grafana-route | awk '{ print $2 }')
 oc create -f cron_job1.yaml
 oc create -f cron_job2.yaml
 
+### check grafana deployment status
+./extras/check-pod-status.sh grafana-deployment myproject Running
+
+### open grafana route
+open https://$(oc get routes | grep grafana-route | awk '{ print $2 }')
+
 ###
 echo
 echo
 echo login to Grafana with root/secret
 echo to add Kafka dashboard use ID: 11271
+echo to add Kafka Exporter dashboard use ID: 11285

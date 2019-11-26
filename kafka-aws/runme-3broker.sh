@@ -48,13 +48,13 @@ echo sleeping 45 seconds before checking grafana deployment status
 sleep 45
 
 ### check grafana deployment status
-./check-pod-status.sh grafana-deployment myproject
+./extras/check-pod-status.sh grafana-deployment myproject
 
 ### open grafana route
 open https://$(oc get routes | grep grafana-route | awk '{ print $2 }')
 
 ### check kafka deployment status
-./check-pod-status.sh my-cluster-kafka-2 myproject
+./extras/check-pod-status.sh my-cluster-kafka-2 myproject
 
 ### setup kafka jobs with correct NodeIP service addresses
 ./setup_cron.sh

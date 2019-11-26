@@ -94,12 +94,12 @@ By default, this demo will set up up a CronJob which will deploy a job every 2 m
 
 To start a consumer to view incoming `my-topic1` messages
 ```
-./consumer1.sh
+./extras/consumer1.sh
 ```
 
 To start a consumer to view incoming `my-topic2` messages
 ```
-./consumer2.sh
+./extras/consumer2.sh
 ```
 
 Navigate to the logs of a consumer to view incoming messages

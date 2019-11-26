@@ -41,28 +41,19 @@ This quick script will:
 - Login to Openshift as an admin
 - Deploy the Strimzi Kafka Operator
 - Deploy an ephemeral kafka cluster with 3 broker nodes and 3 zookeeper nodes
+- Setup the kafka brokers connectivity using nodePort services
 - Create three Kafka topics (my-topic1, my-topic2, my-topic3)
 - Deploy Prometheus
-- Deploy Grafana
-- Forward port 3000 to localhost for Grafana
+- Deploy the Integrately Grafana Operator
+- Add the Prometheus Datasource to Grafana
+- Open the Grafana Route
+- Create sample Kafka Producer jobs and cronJobs with correct network routing
+- Deploy sample cronJob1 and cronJob2
 
-Once complete, open Grafana and login as `admin/admin`
-```
-open http://localhost:3000
-```
-![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/grafana1.png)
+Once complete, login to Grafana as `root/secret`
 
-Click on the "Add data Source" icon in the Grafana Homepage
-![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/grafana2.png)
-
-Add Prometheus as a datasource, specifying the information below and select Save & Test at the bottom
-```
-Name: prometheus
-Type: Prometheus
-URL: http://prometheus:9090
-```
-
-![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/grafana4.png)
+## Adding Dashboards
+Soon we will automate the dashboard integration out-of-the-box, but for now follow the steps below to import your Kafka dashboards
 
 From the top left menu, click on "Dashboards" and then "Import" to open the "Import Dashboard" window
 ![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/grafana5.png)
@@ -81,107 +72,20 @@ Once you're done you should be able to see dashboards for both Kafka
 and Zookeeper:
 ![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/dashboard2.png)
 
-## Accessing Kafka
 
-REF: https://strimzi.io/2019/04/17/accessing-kafka-part-1.html
+### Showing the Demo
+By default, this demo will set up up a CronJob which will deploy a job every 2 minutes with a parallelism of 2 and completions of 4. You can visualize the dynamic job creation through the Jobs tab in the Openshift Console as well as through the Strimzi Dashboard we built earlier
 
-In a single-node deployment of Kafka, routing and accessing the brokers is easy because everything is running on the same node. When we move to multi-node deployments, accessing the Kafka cluster requires additional Services to be created in order to route the traffic correctly. Read the reference link above to have a deeper understanding of Kafka's discovery protocol and more on the routing options below
-- Using NodePorts
-- Using OpenShift routes
-- Using Load Balancers
-- Using Ingress
+![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/cron1.png)
 
-### Node Ports
-REF: https://strimzi.io/2019/04/23/accessing-kafka-part-2.html
+![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/cron2.png)
 
-A NodePort is a special type of Kubernetes service. When such a service is created, Kubernetes will allocate a port on all nodes of the Kubernetes cluster and will make sure that all traffic to this port is routed to the service and eventually to the pods behind this service.
-
-The routing of the traffic is done by the kube-proxy Kubernetes component. It doesn’t matter which node your pod is running on. The node ports will be open on all nodes and the traffic will always reach your pod. So your clients need to connect to the node port on any of the nodes of the Kubernetes cluster and let Kubernetes handle the rest.
-
-The node port is selected from the port range 30000-32767 by default. But this range can be changed in Kubernetes configuration (see Kubernetes docs for more details about configuring the node port range).
-
-#### Setting up NodePort routes
-
-Take a look at your existing services, note that some components are exposed using type NodePort
-```
-oc get services -n myproject
-```
-
-The script below will use the parameterized `job.template.yaml` and set up three files in your directory named `job1.yaml`, `job2.yaml`, and `job3.yaml` that are configured correctly to use the NodePort services to route to the Kafka cluster brokers
-```
-./setup-jobs.sh
-```
-
-If you open up the newly created files such as `job1.yaml` you will see the route populated with the correct hostname:nodePort, example below:
-```
-bootstrap.servers=ip-10-0-135-104.us-west-2.compute.internal:31316,ip-10-0-135-104.us-west-2.compute.internal:32283,ip-10-0-135-104.us-west-2.compute.internal:31803,ip-10-0-135-104.us-west-2.compute.internal:32289
-```
-
-## Demo 1 - Producing and consuming individual messages
-To show a basic demo of producing and consuming individual messages you can use the commands below:
-
-To start a producer container where we can dynamically input messages
-```
-./producer1.sh
-```
-
-To start a consumer container so we can see the received messages
+To start a consumer to view incoming `my-topic1` messages
 ```
 ./consumer1.sh
 ```
 
-## Demo 2 - Producing and consuming multiple messages
-We can also simulate a more real-world scenario by using a Job. Taking a look at the `job.template.yaml` we will note some parameters under `spec` that we can change to manipulate numbers of actors, and number of completions (each container instance serves as a "user" on our application)
-
-In our default example we want to have three actors at a given time, 200 total completions, and provide the requests and limits for container resources to be 150/250 respectively
-```
-parallelism: 3
-completions: 50
-resources:
-  requests:
-    memory: "150Mi"
-    cpu: "150m"
-  limits:
-    memory: "250Mi"
-    cpu: "250m"
-```
-
-We can also manipulate the kafka-specific parameters under the `command` spec, this will allow us to send messages to other topics, increase the number of messages per actor, how large the messages are, and how quickly they come through:
-
-In our default example we want to send our messages to the topic `my-topic1`, each actor sending 100000 messages, each message with a record size of 5 bytes, and at a throughput of 1M messages/second maximum.
-```
---topic my-topic1
---num-records 100000
---record-size 5
---throughput 1000000
-```
-
-### Create your job files
-A producer has been templatized into the example `job.template.yaml` file from which we will generate `job1.yaml`, `job2.yaml`, and `job3.yaml`
-```
-./setup_jobs.sh
-```
-
-Running this script will grab and set the correct variables for `<NODEIP>`,`<nodePort>` because these parameters will be different per each deployment
-
-### Running the Demo
-
-Deploy the `job1.yaml` which deploys a kafka producer writing messages to `my-topic1`
-```
-oc create -n myproject -f job1.yaml
-```
-
-To start a consumer for `my-topic1` messages
-```
-./consumer1.sh
-```
-
-If you want to demonstrate a second topic/producer combo running in parallel writing messages to `my-topic2`
-```
-oc create -n myproject -f job2.yaml
-```
-
-To start a consumer for `my-topic2` messages
+To start a consumer to view incoming `my-topic2` messages
 ```
 ./consumer2.sh
 ```
@@ -216,49 +120,6 @@ SSXVNJHPDQ
 SSXVNJHPDQ
 ```
 
-## Demo 3 - Running a Producer on a Schedule
-We may have a scenario where a worker runs on a set schedule to produce messages to a particular topic to be ingested. We can simulate this scenario using the instructions below
-
-### Create your CronJob files
-
-Take a look at the `setup_cron.sh` and see the parameters that can be manipulated
-```
-namespace=myproject
-
-## job1 Variables (Optional)
-job1_parallelism=2
-job1_completions=4
-job1_topic=my-topic1
-
-## job2 Variables (Optional)
-job2_parallelism=2
-job2_completions=4
-job2_topic=my-topic2
-
-## job3 Variables (Optional)
-job3_parallelism=2
-job3_completions=4
-job3_topic=my-topic1
-```
-
-A producer has been templatized into the example `cronjob.template.yaml` file from which we will generate `cron_job1.yaml`, `cron_job2.yaml`, and `cron_job3.yaml`
-```
-./setup_cron.sh
-```
-
-### Running the Demo
-Deploy the CronJobs which deploy a kafka producer writing messages to the topic specified in the variables
-```
-oc create -n myproject -f job1.yaml
-oc create -n myproject -f job2.yaml
-oc create -n myproject -f job3.yaml
-```
-By default, this will set up up a CronJob which will deploy a job every 2 minutes with a parallelism of 2 and completions of 4. You can visualize the dynamic job creation through the Jobs tab in the Openshift Console as well as through the Strimzi Dashboard we built earlier
-
-![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/cron1.png)
-
-![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/cron2.png)
-
 ## Bonus:
 Navigate to the Openshift UI and demo through all of the orchestration of pods, jobs, monitoring, resource consumption, etc.
 ![](https://github.com/ably77/RH-demos/blob/master/kafka-aws/resources/openshift1.png)
@@ -292,47 +153,4 @@ oc edit -f yaml/my-topic1.yaml
 Run
 ```
 ./uninstall.sh
-```
-
-### Manual Steps to Uninstall
-
-Removing the consumers:
-```
-oc delete pod kafka-consumer1 -n myproject
-oc delete pod kafka-consumer2 -n myproject
-```
-
-Removing Jobs:
-```
-oc delete -f yaml/job1.yaml -n myproject
-oc delete -f yaml/job2.yaml -n myproject
-oc delete -f yaml/job3.yaml -n myproject
-```
-
-Remove Kafka topics
-```
-oc delete -f yaml/my-topic1.yaml
-oc delete -f yaml/my-topic2.yaml
-oc delete -f yaml/my-topic3.yaml
-```
-
-Delete Kafka Cluster
-```
-oc delete -f yaml/kafka-cluster-3broker.yaml -n myproject
-```
-
-Delete Prometheus:
-```
-oc delete -f yaml/alerting-rules.yaml -n myproject
-oc delete -f yaml/prometheus.yaml -n myproject
-```
-
-Delete Grafana:
-```
-oc delete -f yaml/grafana.yaml -n myproject
-```
-
-Remove Strimzi Operator
-```
-oc delete -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/0.12.1/strimzi-cluster-operator-0.12.1.yaml -n myproject
 ```

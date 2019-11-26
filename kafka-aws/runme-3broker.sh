@@ -43,10 +43,6 @@ oc create -f grafana-operator/deploy/examples/datasources/Prometheus.yaml -n ${N
 
 #oc create -f deploy/examples/dashboards/kafka-dashboard.yaml -n ${NAMESPACE}
 
-### sleep
-echo sleeping 45 seconds before checking grafana deployment status
-sleep 45
-
 ### check grafana deployment status
 ./extras/check-pod-status.sh grafana-deployment myproject
 

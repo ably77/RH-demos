@@ -152,5 +152,5 @@ oc edit -f yaml/my-topic1.yaml
 
 Run
 ```
-./uninstall.sh
+./uninstall-3broker.sh
 ```

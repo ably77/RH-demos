@@ -19,7 +19,7 @@ spec:
     auth.basic:
       enabled: False
     auth.anonymous:
-      enabled: True
+      enabled: False
   dashboardLabelSelector:
     - matchExpressions:
         - {key: app, operator: In, values: [grafana]}

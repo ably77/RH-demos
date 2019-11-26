@@ -29,7 +29,11 @@ oc delete -f yaml/alerting-rules.yaml -n ${NAMESPACE}
 oc delete -f yaml/prometheus.yaml -n ${NAMESPACE}
 
 # Delete Grafana:
-oc delete -f yaml/grafana.yaml -n ${NAMESPACE}
+oc delete -f grafana-operator/deploy/examples/datasources/Prometheus.yaml -n ${NAMESPACE}
+oc delete -f grafana-operator/deploy/examples/GrafanaWithIngressHost.yaml -n ${NAMESPACE}
+oc delete -f grafana-operator/deploy/operator.yaml -n ${NAMESPACE}
+oc delete -f grafana-operator/deploy/roles -n ${NAMESPACE}
+oc delete -f grafana-operator/deploy/crds -n ${NAMESPACE}
 
 # Remove Strimzi Operator
 oc delete -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/0.12.1/strimzi-cluster-operator-0.12.1.yaml -n ${NAMESPACE}

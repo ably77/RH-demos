@@ -152,12 +152,12 @@ oc get kafkatopic
 
 To scale your Kafka cluster up, add a broker using the commmand below and modify the `replicas:1 --> 2` for kafka brokers
 ```
-oc edit -f yaml/kafka-cluster-3broker.yaml -n myproject
+oc edit -f strimzi-operator/deploy/crs/kafka-cluster-3broker.yaml -n myproject
 ```
 
 To edit your topic (i.e. adding topic parameters or scaling up partitions)
 ```
-oc edit -f yaml/my-topic1.yaml
+oc edit -f strimzi-operator/deploy/crs/my-topic1.yaml
 ```
 
 ## Uninstall

@@ -36,4 +36,4 @@ oc delete -f grafana-operator/deploy/roles -n ${NAMESPACE}
 oc delete -f grafana-operator/deploy/crds -n ${NAMESPACE}
 
 # Remove Strimzi Operator
-oc delete -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/0.12.1/strimzi-cluster-operator-0.12.1.yaml -n ${NAMESPACE}
+oc delete -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/0.14.0/strimzi-cluster-operator-0.14.0.yaml -n ${NAMESPACE}

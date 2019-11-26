@@ -26,6 +26,18 @@ Responsible for managing Kafka topics within a Kafka cluster running within an O
 User Operator
 Responsible for managing Kafka users within a Kafka cluster running within an OpenShift or Kubernetes cluster.
 
+### Integreatly Grafana Operator
+
+A Kubernetes Operator based on the Operator SDK for creating and managing Grafana instances.
+
+The Operator is available on [Operator Hub](https://operatorhub.io/operator/grafana-operator).
+
+It can deploy and manage a Grafana instance on Kubernetes and OpenShift. The following features are supported:
+
+* Install Grafana to a namespace
+* Import Grafana dashboards from the same or other namespaces
+* Import Grafana datasources from the same namespace
+* Install Plugins (panels) defined as dependencies of dashboards
 
 ## Prerequisites:
 - Multi Node Openshift/Kubernetes Cluster (3 workers minimum)

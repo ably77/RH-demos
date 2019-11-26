@@ -17,12 +17,12 @@ oc delete -f cron_job2.yaml -n ${NAMESPACE}
 oc delete -f cron_job3.yaml -n ${NAMESPACE}
 
 # Remove Kafka Topics
-oc delete -f deploy/crs/my-topic1.yaml -n ${NAMESPACE}
-oc delete -f deploy/crs/my-topic2.yaml -n ${NAMESPACE}
-oc delete -f deploy/crs/my-topic3.yaml -n ${NAMESPACE}
+oc delete -f strimzi-operator/deploy/crs/my-topic1.yaml -n ${NAMESPACE}
+oc delete -f strimzi-operator/deploy/crs/my-topic2.yaml -n ${NAMESPACE}
+oc delete -f strimzi-operator/deploy/crs/my-topic3.yaml -n ${NAMESPACE}
 
 # Delete Kafka Cluster
-oc delete -f deploy/crs/kafka-cluster-3broker.yaml -n ${NAMESPACE}
+oc delete -f strimzi-operator/deploy/crs/kafka-cluster-3broker.yaml -n ${NAMESPACE}
 
 # Delete Prometheus:
 oc delete -f prometheus/alerting-rules.yaml -n ${NAMESPACE}

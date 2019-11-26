@@ -9,12 +9,12 @@ oc new-project ${NAMESPACE}
 oc apply -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/0.12.1/strimzi-cluster-operator-0.12.1.yaml -n ${NAMESPACE}
 
 ### Provision the Apache Kafka Cluster
-oc create -f deploy/crs/kafka-cluster-3broker.yaml -n ${NAMESPACE}
+oc create -f strimzi-operator/deploy/crs/kafka-cluster-3broker.yaml -n ${NAMESPACE}
 
 ### Create Kafka Topics
-oc create -f deploy/crs/my-topic1.yaml
-oc create -f deploy/crs/my-topic2.yaml
-oc create -f deploy/crs/my-topic3.yaml
+oc create -f strimzi-operator/deploy/crs/my-topic1.yaml
+oc create -f strimzi-operator/deploy/crs/my-topic2.yaml
+oc create -f strimzi-operator/deploy/crs/my-topic3.yaml
 
 ### Start up your Prometheus server
 oc create -f prometheus/alerting-rules.yaml -n ${NAMESPACE}

@@ -4,6 +4,7 @@ metadata:
   name: "default"
 spec:
   podPriorityThreshold: -10
+  balanceSimilarNodeGroups: true
   resourceLimits:
     maxNodesTotal: <MAXNODESTOTAL>
     cores:
@@ -22,6 +23,6 @@ spec:
   scaleDown:
     enabled: <SCALEDOWN_ENABLED>
     delayAfterAdd: 10m
-    delayAfterDelete: 5m
+    delayAfterDelete: 10m
     delayAfterFailure: 30s
     unneededTime: 60s

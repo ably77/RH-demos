@@ -6,6 +6,13 @@ spec:
   kafka:
     version: 2.3.0
     replicas: 3
+    resources:
+      requests:
+        memory: "2000Mi"
+        cpu: "500m"
+      limits:
+        memory: "4000Mi"
+        cpu: "1000m"
     listeners:
       plain: {}
       tls: {}
@@ -34,6 +41,24 @@ spec:
       #  type: persistent-claim
       #  size: 100Gi
       #  deleteClaim: false
+    rack:
+      topologyKey: "kubernetes.io/hostname"
+    ## for if you set up taints and labels for dedicated nodes see (https://strimzi.io/2018/07/30/running-kafka-on-dedicated-nodes.html)
+    #tolerations:
+      #- key: "dedicated"
+        #operator: "Equal"
+        #value: "Kafka"
+        #effect: "NoSchedule"
+    ## for if you set up taints and labels for dedicated nodes, set affinity to label
+    #affinity:
+      #nodeAffinity:
+        #requiredDuringSchedulingIgnoredDuringExecution:
+          #nodeSelectorTerms:
+          #- matchExpressions:
+            #- key: dedicated
+              #operator: In
+              #values:
+              #- Kafka
     metrics:
       # Inspired by config from Kafka 2.0.0 example rules:
       # https://github.com/prometheus/jmx_exporter/blob/master/example_configs/kafka-2_0_0.yml
@@ -133,6 +158,13 @@ spec:
           quantile: "0.$4"
   zookeeper:
     replicas: 3
+    resources:
+      requests:
+        memory: "2000Mi"
+        cpu: "500m"
+      limits:
+        memory: "4000Mi"
+        cpu: "1000m"
     readinessProbe:
       initialDelaySeconds: 15
       timeoutSeconds: 5
@@ -177,3 +209,10 @@ spec:
   kafkaExporter:
     topicRegex: ".*"
     groupRegex: ".*"
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "200m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"

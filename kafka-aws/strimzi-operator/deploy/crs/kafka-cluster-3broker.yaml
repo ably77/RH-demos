@@ -8,11 +8,11 @@ spec:
     replicas: 3
     resources:
       requests:
-        memory: "2000Mi"
-        cpu: "500m"
+        memory: "1000Mi"
+        cpu: "200m"
       limits:
-        memory: "4000Mi"
-        cpu: "1000m"
+        memory: "2000Mi"
+        cpu: "400m"
     listeners:
       plain: {}
       tls: {}
@@ -41,6 +41,7 @@ spec:
       #  type: persistent-claim
       #  size: 100Gi
       #  deleteClaim: false
+    ## example for if you want to set rack topology - hostname=unique
     rack:
       topologyKey: "kubernetes.io/hostname"
     ## for if you set up taints and labels for dedicated nodes see (https://strimzi.io/2018/07/30/running-kafka-on-dedicated-nodes.html)
@@ -160,17 +161,19 @@ spec:
     replicas: 3
     resources:
       requests:
-        memory: "2000Mi"
-        cpu: "500m"
+        memory: "200Mi"
+        cpu: "25m"
       limits:
-        memory: "4000Mi"
-        cpu: "1000m"
+        memory: "600Mi"
+        cpu: "75m"
     readinessProbe:
       initialDelaySeconds: 15
       timeoutSeconds: 5
     livenessProbe:
       initialDelaySeconds: 15
       timeoutSeconds: 5
+    rack:
+      topologyKey: "kubernetes.io/hostname"
     storage:
       type: ephemeral
       #type: persistent-claim
@@ -206,13 +209,20 @@ spec:
   entityOperator:
     topicOperator: {}
     userOperator: {}
+    resources:
+      requests:
+        memory: "32Mi"
+        cpu: "5m"
+      limits:
+        memory: "128Mi"
+        cpu: "20m"
   kafkaExporter:
     topicRegex: ".*"
     groupRegex: ".*"
     resources:
       requests:
         memory: "64Mi"
-        cpu: "200m"
+        cpu: "25m"
       limits:
         memory: "128Mi"
-        cpu: "500m"
+        cpu: "50m"

@@ -5,6 +5,7 @@ OUTPUT=0
 pod_name=$1
 namespace=$2
 
+sleep 5
 while [ "$OUTPUT" -ne 1 ]; do
   hashed_name=$(oc get pods -n ${namespace} | grep ${pod_name}  | awk 'NR==1{ print $1 }')
   OUTPUT=`oc get pods ${hashed_name} -n ${namespace} | tail -n +2 | grep -c Running`;
@@ -13,5 +14,5 @@ while [ "$OUTPUT" -ne 1 ]; do
   sleep 5
 done
 
-echo $pod_name is up and Running!
-sleep 10
+echo $hashed_name is up and Running!
+sleep 5

@@ -14,4 +14,4 @@ while [ "$OUTPUT" -ne 1 ]; do
 done
 
 echo $hashed_name is up and Running!
-sleep 5
+echo

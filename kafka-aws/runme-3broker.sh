@@ -48,10 +48,9 @@ oc create -f grafana-operator/deploy/examples/GrafanaWithIngressHost.yaml -n ${N
 #echo
 #sleep 20
 
-### check grafana deployment status
-./extras/wait-for-condition.sh grafana-deployment myproject
-
 ### check kafka deployment status
+echo
+echo waiting for kafka deployment to complete
 ./extras/wait-for-condition.sh my-cluster-kafka-2 myproject
 
 ### setup kafka jobs with correct NodeIP service addresses
@@ -61,6 +60,11 @@ oc create -f grafana-operator/deploy/examples/GrafanaWithIngressHost.yaml -n ${N
 ### deploy kafka jobs
 oc create -f cron_job1.yaml
 oc create -f cron_job2.yaml
+
+### check grafana deployment status
+echo
+echo checking to see if the grafana deployment is Running before opening route
+./extras/wait-for-condition.sh grafana-deployment myproject
 
 ### open grafana route
 open https://$(oc get routes | grep grafana-route | awk '{ print $2 }')

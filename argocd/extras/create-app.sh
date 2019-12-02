@@ -1,10 +1,10 @@
 #!/bin/bash
 
-argo_project="default"
-app_name="simple-app"
-repo_url="https://github.com/ably77/argocd-demo"
-namespace="argocd"
-sync_policy="none"
+argo_project="$1"
+app_name="$2"
+repo_url="$3"
+namespace="$4"
+sync_policy="$5"
 
 argocd app create --project ${argo_project} \
 --name ${app_name} --repo ${repo_url} \

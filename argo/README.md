@@ -1,44 +1,36 @@
-# ArgoCD Demo
+# Argo
 
-### Prerequisites
-- Openshift Cluster
-- User with cluster-admin privileges
+This repository consists of several Argo project demos
+- ArgoCD
+- Argo Workflows
 
-### Setup
-To setup ArgoCD with a simple http app demo just run the script
-```
-./runme.sh
-```
+## What is Argoproj?
 
-### Adding a new project to ArgoCD
-Add github repo
-```
-argocd repo add ${repo_url}
-```
+Argoproj is a collection of tools for getting work done with Kubernetes.
+* [Argo Workflows](https://github.com/argoproj/argo) - Container-native Workflow Engine
+* [Argo CD](https://github.com/argoproj/argo-cd) - Declarative GitOps Continuous Delivery
 
-Create project in ArgoCD
-```
-./extras/create-app.sh ${argo_project} ${app_name} ${repo_url} ${app_namespace} ${sync_policy}
-```
+### What is Argo CD?
 
-Dry run
-```
-argocd app sync ${app_name} --dry-run
-```
+Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes.
 
-Deploy
-```
-argocd app sync ${app_name}
-```
+### Why Argo CD?
 
-### Extras
-Setup sync policy and prune
-```
-argocd app set ${app_name} --sync-policy automated --auto-prune
-```
+Application definitions, configurations, and environments should be declarative and version controlled.
 
-### Uninstall
-To uninstall this demo
-```
-./uninstall.sh
-```
+Application deployment and lifecycle management should be automated, auditable, and easy to understand.
+
+
+### What is Argo Workflows?
+Argo Workflows is an open source container-native workflow engine for orchestrating parallel jobs on Kubernetes. Argo Workflows is implemented as a Kubernetes CRD (Custom Resource Definition).
+
+* Define workflows where each step in the workflow is a container.
+* Model multi-step workflows as a sequence of tasks or capture the dependencies between tasks using a graph (DAG).
+* Easily run compute intensive jobs for machine learning or data processing in a fraction of the time using Argo Workflows on Kubernetes.
+* Run CI/CD pipelines natively on Kubernetes without configuring complex software development products.
+
+### Why Argo Workflows?
+* Designed from the ground up for containers without the overhead and limitations of legacy VM and server-based environments.
+* Cloud agnostic and can run on any Kubernetes cluster.
+* Easily orchestrate highly parallel jobs on Kubernetes.
+* Argo Workflows puts a cloud-scale supercomputer at your fingertips!

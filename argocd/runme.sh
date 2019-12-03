@@ -3,6 +3,7 @@
 # argo deployment varaiables
 argo_namespace="argocd"
 new_password="secret"
+argo_version="1.3.0"
 
 # demo app deployment variables
 argo_project="default"
@@ -15,7 +16,7 @@ sync_policy="none"
 oc new-project ${argo_namespace}
 
 # Apply the ArgoCD Install Manifest
-oc apply -f https://raw.githubusercontent.com/argoproj/argo-cd/v1.2.2/manifests/install.yaml -n ${argo_namespace}
+oc apply -f https://raw.githubusercontent.com/argoproj/argo-cd/v${argo_version}/manifests/install.yaml -n ${argo_namespace}
 
 ./extras/wait-for-condition.sh argocd-server ${argo_namespace}
 
@@ -34,8 +35,8 @@ oc -n ${argo_namespace} create route edge argocd-server --service=argocd-server 
 argocd_route=$(oc -n ${argo_namespace} get route argocd-server -o jsonpath='{.spec.host}')
 
 # sleep - automate this
-echo sleeping 60 seconds to wait for route creation to complete
-sleep 60
+echo sleeping 75 seconds to wait for route creation to complete
+sleep 75
 
 # Login with the current admin password
 argocd --insecure --grpc-web login ${argocd_route}:443 --username admin --password ${argocd_server_password}

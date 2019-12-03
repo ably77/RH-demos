@@ -1,8 +1,14 @@
+#!/bin/bash
+
+# argo deployment varaiables
 argo_namespace="argo"
-argowf_version="2.4.2"
+argo_route="argocd-server"
+app_name="simple-app"
+argo_version="1.3.0"
 
-# Remove the Argo Workflow Install Manifest
-oc delete -n ${argo_namespace} -f https://raw.githubusercontent.com/argoproj/argo/v${argowf_version}/manifests/install.yaml
+# delete app
+argocd app delete ${app_name}
 
-# delete admin privileges to the service account in the namespace
-oc delete rolebinding default-admin --clusterrole=admin --serviceaccount=default:default
+oc delete -f https://raw.githubusercontent.com/argoproj/argo-cd/v${argo_version}/manifests/install.yaml -n ${argo_namespace}
+
+oc delete routes ${argo_route}

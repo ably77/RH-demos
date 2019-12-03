@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # argo deployment varaiables
-argo_namespace="argocd"
+argo_namespace="argo"
 new_password="secret"
 argo_version="1.3.0"
 

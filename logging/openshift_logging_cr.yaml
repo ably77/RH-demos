@@ -17,19 +17,21 @@ spec:
       redundancyPolicy: "SingleRedundancy"
       nodeSelector:
         node-role.kubernetes.io/infra: ""
+        node-role.kubernetes.io/logging: ""
       resources:
         limits:
-          cpu: 500m
-          memory: 2Gi
+          cpu: 2000m
+          memory: 16Gi
         requests:
-          cpu: 500m
-          memory: 2Gi
+          cpu: 1000m
+          memory: 8Gi
   visualization:
     type: "kibana"
     kibana:
       replicas: 1
       nodeSelector:
         node-role.kubernetes.io/infra: ""
+        node-role.kubernetes.io/logging: ""
       resources:
         limits:
           memory: 1Gi
@@ -42,6 +44,7 @@ spec:
       schedule: "30 3 * * *"
       nodeSelector:
         node-role.kubernetes.io/infra: ""
+        node-role.kubernetes.io/logging: ""
       resources:
         limits:
           memory: 200Mi

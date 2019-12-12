@@ -1,4 +1,4 @@
-node=ip-10-0-166-49.us-west-2.compute.internal
+node=$1
 key=kubernetes.io/os
 value=linux
 

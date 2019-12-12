@@ -4,7 +4,7 @@
 clusterid=ly-demo-bdxnm
 role=infra
 second_role=logging
-instancetype=t3.xlarge
+instancetype=t3.2xlarge
 region=us-east-1
 zone=c
 ami_id=ami-01e7fdcb66157b224

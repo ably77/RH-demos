@@ -70,7 +70,7 @@ ip-10-0-208-237.ec2.internal   Ready    worker                 4h26m   v1.14.6+c
 
 Taint only the nodes with the logging role
 ```
-./logging-taint <NODE_NAME>
+./logging-taint.sh <NODE_NAME>
 ```
 
 View your taint

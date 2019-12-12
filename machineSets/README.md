@@ -37,7 +37,7 @@ oc get machineset -n openshift-machine-api $worker_node -o yaml | grep machine.o
 oc get machineset -n openshift-machine-api $worker_node -o yaml | grep ami
 ```
 
-## Modify values in setup_infra_machineset.sh
+## Modify values in setup_machineset.sh
 ```
 clusterid=<CLUSTER_NAME> (i.e. ly-demo-jv56h)
 ami_id=<AMI_ID> (i.e. ami-12345678)

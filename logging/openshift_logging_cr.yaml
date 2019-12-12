@@ -9,28 +9,52 @@ spec:
     type: "elasticsearch"
     elasticsearch:
       nodeCount: 3
-      storage: {}
+      # ephemeral emptydir storage for testing purposes
+      #storage: {}
+      storage:
+          storageClassName: "gp2"
+          size: "200G"
       redundancyPolicy: "SingleRedundancy"
       nodeSelector:
         node-role.kubernetes.io/infra: ""
       resources:
-        request:
-          memory: 4G
+        limits:
+          cpu: 500m
+          memory: 2Gi
+        requests:
+          cpu: 500m
+          memory: 2Gi
   visualization:
     type: "kibana"
     kibana:
       replicas: 1
       nodeSelector:
         node-role.kubernetes.io/infra: ""
+      resources:
+        limits:
+          memory: 1Gi
+        requests:
+          cpu: 500m
+          memory: 1Gi
   curation:
     type: "curator"
     curator:
       schedule: "30 3 * * *"
       nodeSelector:
         node-role.kubernetes.io/infra: ""
+      resources:
+        limits:
+          memory: 200Mi
+        requests:
+          cpu: 200m
+          memory: 200Mi
   collection:
     logs:
       type: "fluentd"
-      fluentd: {}
-      nodeSelector:
-        node-role.kubernetes.io/infra: ""
+      fluentd:
+        resources:
+          limits:
+            memory: 1Gi
+          requests:
+            cpu: 200m
+            memory: 1Gi

@@ -40,7 +40,7 @@ spec:
       - id: 0
         type: persistent-claim
         size: 100Gi
-        deleteClaim: false
+        deleteClaim: true
     ## example for if you want to set rack topology - hostname=unique
     rack:
       topologyKey: "kubernetes.io/hostname"
@@ -56,10 +56,10 @@ spec:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
           - matchExpressions:
-            - key: "role"
-              operator: "Equal"
+            - key: "node-role.kubernetes.io/kafka"
+              operator: "In"
               values:
-              - kafka
+              - ""
     metrics:
       # Inspired by config from Kafka 2.0.0 example rules:
       # https://github.com/prometheus/jmx_exporter/blob/master/example_configs/kafka-2_0_0.yml
@@ -178,7 +178,7 @@ spec:
       #type: ephemeral
       type: persistent-claim
       size: 100Gi
-      deleteClaim: false
+      deleteClaim: true
     metrics:
       # Inspired by Zookeeper rules
       # https://github.com/prometheus/jmx_exporter/blob/master/example_configs/zookeeper.yaml

@@ -12,8 +12,6 @@ View the YAML of a specific MachineSet
 oc get machineset <machineset_name> -n openshift-machine-api -o yaml
 ```
 
-Note: it is useful to use this in order to retrieve the AMI ID or any specific labels of a desired machine in your cluster
-
 Edit an existing MachineSet
 ```
 oc edit machineset <machineset_name> -n openshift-machine-api
@@ -22,25 +20,8 @@ oc edit machineset <machineset_name> -n openshift-machine-api
 # Creating a New Machine Set
 Use the script called `setup_machineset.sh` in order to create a new machine set based off of the `machineset.template.yaml`. Using a text editor of choice, edit the file and replace the variable values to desired values. See example below
 
-## Set worker_node variable
-```
-worker_node=$(oc get machinesets -n openshift-machine-api | awk 'NR==2{ print $1 }')
-```
-
-## grep for clusterID
-```
-oc get machineset -n openshift-machine-api $worker_node -o yaml | grep machine.openshift.io/cluster-api-cluster:
-```
-
-## grep for AMI ID value
-```
-oc get machineset -n openshift-machine-api $worker_node -o yaml | grep ami
-```
-
 ## Modify values in setup_machineset.sh
 ```
-clusterid=<CLUSTER_NAME> (i.e. ly-demo-jv56h)
-ami_id=<AMI_ID> (i.e. ami-12345678)
 role=<worker/infra>
 instancetype=<INSTANCE_TYPE> (i.e. t3.large)
 region=<REGION> (i.e. us-east-1)

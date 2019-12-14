@@ -10,16 +10,6 @@ Change to machineset directory
 cd machineset
 ```
 
-grep for clusterID
-```
-oc get machineset -n openshift-machine-api $worker_node -o yaml | grep machine.openshift.io/cluster-api-cluster:
-```
-
-grep for AMI ID value
-```
-oc get machineset -n openshift-machine-api $worker_node -o yaml | grep ami
-```
-
 Edit machineset variables
 ```
 vi setup_machineset.sh
@@ -27,13 +17,11 @@ vi setup_machineset.sh
 
 Parameters to change:
 ```
-clusterid=ly-demo-bdxnm
 role=infra
 second_role=logging
-instancetype=t3.xlarge
+instancetype=t3.2xlarge
 region=us-east-1
 zone=c
-ami_id=ami-01e7fdcb66157b224
 desired_replicas=3
 ```
 

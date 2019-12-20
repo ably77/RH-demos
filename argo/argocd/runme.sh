@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # argo deployment varaiables
-argo_namespace="argo"
+argo_namespace="argocd"
 new_password="secret"
-argo_version="1.3.0"
+argo_version="1.3.6"
 
 # demo app deployment variables
 argo_project="default"
 app_name="simple-app"
-app_namespace="simple-app"
+app_namespace="default"
 repo_url="https://github.com/ably77/argocd-demo"
 sync_policy="none"
 
@@ -56,7 +56,7 @@ argocd repo add ${repo_url}
 # Dry run
 argocd app sync ${app_name} --dry-run
 
-# If dry-run is successful then deploy app
+# Deploy app
 argocd app sync ${app_name}
 
 # Setup sync policy and prune

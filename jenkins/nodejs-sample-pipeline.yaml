@@ -1,26 +1,13 @@
-apiVersion: build.openshift.io/v1
-kind: BuildConfig
+kind: "BuildConfig"
+apiVersion: "v1"
 metadata:
-  creationTimestamp: "2020-01-09T17:25:34Z"
-  name: nodejs-sample-pipeline
-  namespace: jenkins
-  resourceVersion: "51930"
-  selfLink: /apis/build.openshift.io/v1/namespaces/jenkins/buildconfigs/nodejs-sample-pipeline
-  uid: 0b744020-3305-11ea-9401-0a580a800038
+  name: "nodejs-sample-pipeline"
 spec:
-  failedBuildsHistoryLimit: 5
-  nodeSelector: {}
-  output: {}
-  postCommit: {}
-  resources: {}
-  runPolicy: Serial
-  source:
-    type: None
   strategy:
     jenkinsPipelineStrategy:
       jenkinsfile: |-
         // path of the template to use
-        def templatePath = 'https://raw.githubusercontent.com/openshift/nodejs-ex/master/openshift/templates/nodejs-mongodb.json'
+        def templatePath = 'https://raw.githubusercontent.com/ably77/nodejs-ex/master/openshift/templates/nodejs-mongodb.json'
         // name of the template that will be created
         def templateName = 'nodejs-mongodb-example'
         // NOTE, the "pipeline" directive/closure from the declarative pipeline syntax needs to include, or be nested outside,
@@ -122,8 +109,4 @@ spec:
                 } // stage
             } // stages
         } // pipeline
-    type: JenkinsPipeline
-  successfulBuildsHistoryLimit: 5
-  triggers: []
-status:
-  lastVersion: 0
+      type: JenkinsPipeline

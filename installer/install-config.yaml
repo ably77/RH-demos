@@ -5,12 +5,16 @@ compute:
   name: worker
   platform:
     aws:
-      type: t3.large
-  replicas: 3
+      type: r5.xlarge
+  replicas: 2
 controlPlane:
   hyperthreading: Enabled
   name: master
-  platform: {}
+  platform:
+    aws:
+      type: m5.xlarge
+      zones:
+      - us-east-1a
   replicas: 1
 metadata:
   creationTimestamp: null
@@ -25,6 +29,11 @@ networking:
   - 172.30.0.0/16
 platform:
   aws:
-    region: us-east-2
-pullSecret: <PULL_SECRET>
-sshKey: <SSH_KEY>
+    region: us-east-1
+#additionalTrustBundle: |
+#  -----BEGIN CERTIFICATE-----
+#  xxxyyyyzzzz
+#  -----END CERTIFICATE-----
+pullSecret: '<OMITTED>'
+sshKey: |
+  <OMITTED>

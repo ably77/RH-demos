@@ -17,5 +17,14 @@ cp $HOME/Desktop/installer/install-config.yaml $HOME/Desktop/${CLUSTER_NAME}
 ### open console route
 open https://console-openshift-console.apps.${CLUSTER_NAME}.openshiftaws.com
 
-### setup ally user and login
+### export kubeconfig
 export KUBECONFIG=$HOME/Desktop/${CLUSTER_NAME}/auth/kubeconfig
+
+### setup new tab for iterm2
+newtabi(){
+  osascript \
+    -e 'tell application "iTerm2" to tell current window to set newWindow to (create tab with default profile)'\
+    -e "tell application \"iTerm2\" to tell current session of newWindow to write text \"${@}\""
+}
+
+newtabi 'export KUBECONFIG=/Users/alexly/Desktop/ly-demo/auth/kubeconfig && cd $HOME/Desktop/openshift-testbed && ./runme.sh'

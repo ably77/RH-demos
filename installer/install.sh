@@ -1,23 +1,19 @@
 #!/bin/bash
 
-mkdir $HOME/Desktop/ly-demo
+### clear kubeconfig
+rm -rf ~/.kube/config
 
-cp $HOME/Desktop/installer/install-config.yaml $HOME/Desktop/ly-demo
+### create cluster directory
+mkdir $HOME/Desktop/<REPLACE_WITH_CLUSTER_NAME>
 
-./openshift-install_4.2stable create cluster --dir=$HOME/Desktop/ly-demo --log-level debug
+### copy ignition into cluster directory
+cp $HOME/Desktop/installer/install-config.yaml $HOME/Desktop/<REPLACE_WITH_CLUSTER_NAME>
 
-#git clone https://github.com/ably77/RH-demos.git $HOME/Desktop/ly-demo/RH-Demos
-#git clone https://github.com/ably77/strimzi-openshift-demo.git $HOME/Desktop/ly-demo/strimzi-openshift-demo
-
+### create cluster
+./openshift-install_4.3.2 create cluster --dir=$HOME/Desktop/<REPLACE_WITH_CLUSTER_NAME> --log-level debug
 
 ### open console route
-open https://console-openshift-console.apps.ly-demo.openshiftaws.com
+open https://console-openshift-console.apps.<REPLACE_WITH_CLUSTER_NAME>.openshiftaws.com
 
-### setup new tab for iterm2
-newtabi(){  
-  osascript \
-    -e 'tell application "iTerm2" to tell current window to set newWindow to (create tab with default profile)'\
-    -e "tell application \"iTerm2\" to tell current session of newWindow to write text \"${@}\""
-}
-
-newtabi 'export KUBECONFIG=/Users/alexly/Desktop/ly-demo/auth/kubeconfig && cd $HOME/Desktop/strimzi-openshift-demo && ./runme.sh'
+### setup ally user and login
+export KUBECONFIG=$HOME/Desktop/<REPLACE_WITH_CLUSTER_NAME>/auth/kubeconfig

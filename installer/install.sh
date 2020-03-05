@@ -1,24 +1,26 @@
 #!/bin/bash
 
-CLUSTER_NAME=<insert cluster name here>
+CLUSTER_NAME= "ly-demo"
+
+CLUSTER_PATH= "$HOME/Desktop"
 
 ### clear kubeconfig
 rm -rf ~/.kube/config
 
 ### create cluster directory
-mkdir $HOME/Desktop/${CLUSTER_NAME}
+mkdir ${CLUSTER_PATH}/${CLUSTER_NAME}
 
 ### copy ignition into cluster directory
-cp $HOME/Desktop/installer/install-config.yaml $HOME/Desktop/${CLUSTER_NAME}
+cp ${CLUSTER_PATH}/installer/install-config.yaml $HOME/Desktop/${CLUSTER_NAME}
 
 ### create cluster
-./openshift-install_4.3.2 create cluster --dir=$HOME/Desktop/${CLUSTER_NAME} --log-level debug
+./openshift-install_4.3.2 create cluster --dir=${CLUSTER_PATH}/${CLUSTER_NAME} --log-level debug
 
 ### open console route
 open https://console-openshift-console.apps.${CLUSTER_NAME}.openshiftaws.com
 
 ### export kubeconfig
-export KUBECONFIG=$HOME/Desktop/${CLUSTER_NAME}/auth/kubeconfig
+export KUBECONFIG=${CLUSTER_PATH}/${CLUSTER_NAME}/auth/kubeconfig
 
 ### setup new tab for iterm2
 newtabi(){

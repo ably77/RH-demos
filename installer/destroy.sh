@@ -1,8 +1,10 @@
 #!/bin/bash
 
-CLUSTER_NAME=<insert cluster name here>
+CLUSTER_NAME= "ly-demo"
 
-./openshift-install_4.3.2 destroy cluster --dir=$HOME/Desktop/${CLUSTER_NAME} --log-level debug
+CLUSTER_PATH= "$HOME/Desktop"
+
+./openshift-install_4.3.2 destroy cluster --dir=${CLUSTER_PATH}/${CLUSTER_NAME} --log-level debug
 
 echo
 echo END.
@@ -12,6 +14,6 @@ read -p "Cluster gone? Remove the installer directory? (y/n) " -n1 -s c
 if [ "$c" = "y" ]; then
         echo yes
 
-rm -rf $HOME/Desktop/${CLUSTER_NAME}
+rm -rf ${CLUSTER_PATH}/${CLUSTER_NAME}
 
 fi
